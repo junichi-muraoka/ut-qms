@@ -1,0 +1,28 @@
+name: Bug Report
+description: Create a report to help us improve
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ### 不具合の概要
+  - type: textarea
+    id: description
+    attributes:
+      label: 不具合の詳細
+      placeholder: 何が起きたか記載してください
+    validations:
+      required: true
+  - type: input
+    id: reproduction
+    attributes:
+      label: 再現手順
+      placeholder: 1. ○○を開く 2. ××をクリック...
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される動作
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の動作
