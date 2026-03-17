@@ -1,0 +1,24 @@
+{
+  "name": "ut-qms-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for Unit Test & Quality Management Suite",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "server": "npx tsx watch server/index.ts",
+    "client": "npm run dev --prefix client"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.19.11",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "hono": "^4.12.8",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "zod": "^4.3.6"
+  }
+}
