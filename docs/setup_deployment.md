@@ -5,7 +5,7 @@
 ## 1. Cloudflare アカウント ID の確認
 まずは、デプロイ先を特定するための「アカウント ID」を準備します。
 
-![Account ID の確認場所](../docs/images/cloudflare_account_id_guide.webp)
+![Account ID の確認場所](../docs/images/cloudflare_account_id_guide.png)
 
 1. [Cloudflare ダッシュボード](https://dash.cloudflare.com/)にログインします。
 2. ブラウザの URL（アドレスバー）を確認してください。
@@ -15,7 +15,7 @@
 ## 2. API トークン（合鍵）の発行
 GitHub があなたの代わりにデプロイを行うための「合鍵」を発行します。
 
-![API トークンの作成テンプレート](../docs/images/cloudflare_api_token_guide.webp)
+![API トークンの作成テンプレート](../docs/images/cloudflare_api_token_guide.png)
 
 1. 右上の人型アイコンをクリックし、**「My Profile」** を選びます。
 2. 左メニューの **「API Tokens」** をクリックします。
