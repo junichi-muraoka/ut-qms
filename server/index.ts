@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { testItemSchema, defectSchema, issueSchema } from './shared_schema'
 import { getLocalDb, getProductionDb } from './db/index'
-import * as schema from './schema'
+import * as schema from './db/schema'
 import { eq, desc } from 'drizzle-orm'
 
 type Bindings = {
