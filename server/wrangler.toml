@@ -10,3 +10,4 @@ compatibility_flags = [ "nodejs_compat" ]
 binding = "DB"
 database_name = "ut-qms-db"
 database_id = "9844bf0a-8208-449e-ae32-514064d65542"
+migrations_dir = "drizzle"
