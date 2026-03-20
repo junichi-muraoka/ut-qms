@@ -219,6 +219,48 @@ app.delete('/api/issues/:id', (c) => {
 
 // --- Quality Stats ---
 
+app.get('/api/trends', (c) => {
+  // Mock time-series data for charts (Burndown and Quality Trends)
+  const today = new Date().toISOString().split('T')[0]
+  const last7Days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date()
+    d.setDate(d.getDate() - (6 - i))
+    return d.toISOString().split('T')[0]
+  })
+
+  // Burndown: Remaining Issues
+  const totalIssuesEnvisaged = 20
+  const progressTrend = last7Days.map((date, i) => ({
+    date,
+    remaining: Math.max(0, totalIssuesEnvisaged - (i * 2 + Math.floor(Math.random() * 2))),
+    ideal: Math.max(0, totalIssuesEnvisaged - (i * 3))
+  }))
+  // Overwrite today with actual current data
+  progressTrend[6] = {
+    date: today,
+    remaining: db.issues.length - db.issues.filter(i => i.status === 'Done').length,
+    ideal: Math.max(0, totalIssuesEnvisaged - 18)
+  }
+
+  // Quality: Cumulative Defects vs Pass Rate
+  const qualityTrend = last7Days.map((date, i) => ({
+    date,
+    defects: i * 2 + Math.floor(Math.random() * 3),
+    passRate: 50 + (i * 5) + Math.floor(Math.random() * 5)
+  }))
+  // Overwrite today with actual current data
+  qualityTrend[6] = {
+    date: today,
+    defects: db.defects.length,
+    passRate: db.testItems.length > 0 ? (db.testItems.filter(i => i.status === 'Pass').length / db.testItems.length) * 100 : 0
+  }
+
+  return c.json({
+    progressTrend,
+    qualityTrend
+  })
+})
+
 app.get('/api/stats', (c) => {
   const totalTests = db.testItems.length
   const passCount = db.testItems.filter(i => i.status === 'Pass').length
