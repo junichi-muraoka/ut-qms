@@ -35,7 +35,7 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: 'server'
-          command: d1 migrations apply ut-qms-db --remote --yes
+          command: d1 migrations apply ut-qms-db --remote
 
   deploy-frontend:
     runs-on: ubuntu-latest
