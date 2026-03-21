@@ -11,3 +11,13 @@ binding = "DB"
 database_name = "ut-qms-db"
 database_id = "9844bf0a-8208-449e-ae32-514064d65542"
 migrations_dir = "drizzle"
+
+# ===== Staging Environment =====
+[env.staging]
+name = "ut-qms-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "ut-qms-db-staging"
+database_id = "<STAGING_DB_ID>"  # TODO: Cloudflare ダッシュボードで作成後に記入
+migrations_dir = "drizzle"

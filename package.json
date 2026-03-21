@@ -9,10 +9,12 @@
   ],
   "scripts": {
     "server": "npx tsx watch server/index.ts",
-    "client": "npm run dev --prefix client"
+    "client": "npm run dev --prefix client",
+    "test:e2e": "npx playwright test"
   },
   "devDependencies": {
     "@hono/node-server": "^1.19.11",
+    "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
