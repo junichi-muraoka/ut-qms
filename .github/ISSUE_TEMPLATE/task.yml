@@ -1,0 +1,37 @@
+name: 🛠 作業タスク (Task)
+description: 新機能の実装や基盤構築のタスクを起票します。
+title: "[カテゴリ] タイトル"
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        具体的で測定可能なタスクを定義してください。
+  - type: textarea
+    id: background
+    attributes:
+      label: 🎯 背景・目的
+      description: なぜこの作業が必要なのか、簡潔に記述してください。
+      placeholder: "例: ロジックの修正が他に影響しないよう、自動テストを導入したい。"
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: ✅ 完了条件 (Acceptance Criteria)
+      description: 何をもってこのタスクが「完了」したとみなすか、チェックリスト形式で記述してください。
+      value: |
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
+  - type: textarea
+    id: task_list
+    attributes:
+      label: 📋 詳細タスク
+      description: 実施する具体的な手順を記述してください。
+      value: |
+        - [ ] 
+        - [ ] 
+    validations:
+      required: true
