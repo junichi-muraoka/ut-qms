@@ -2,7 +2,7 @@ name: Deploy to Cloudflare
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
 
 jobs:
   deploy-backend:
@@ -10,7 +10,7 @@ jobs:
     name: Deploy Backend (Workers)
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -21,13 +21,23 @@ jobs:
       - name: Install Dependencies
         run: cd server && npm install
 
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           workingDirectory: 'server'
           command: deploy
+
+      - name: Deploy to Staging
+        if: github.ref == 'refs/heads/develop'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: 'server'
+          command: deploy --env staging
 
   deploy-frontend:
     runs-on: ubuntu-latest
@@ -48,9 +58,18 @@ jobs:
       - name: Build Frontend
         run: cd client && npm run build
 
-      - name: Deploy to Cloudflare Pages
+      - name: Deploy to Production (Pages)
+        if: github.ref == 'refs/heads/main'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy client/dist --project-name=ut-qms
+
+      - name: Deploy to Staging (Pages)
+        if: github.ref == 'refs/heads/develop'
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy client/dist --project-name=ut-qms-staging
