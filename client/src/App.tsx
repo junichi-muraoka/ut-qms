@@ -4,6 +4,10 @@ import {
   AreaChart, Area
 } from 'recharts'
 
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3001'
+  : 'https://ut-qms.j-muraoka-secure.workers.dev'
+
 function App() {
   const [activeTab, setActiveTab] = useState('test-items')
   const [testItems, setTestItems] = useState([])
@@ -34,7 +38,7 @@ function App() {
   const fetchTestItems = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3001/api/test-items')
+      const res = await fetch(`${API_BASE_URL}/api/test-items`)
       const data = await res.json()
       setTestItems(data.items || [])
     } catch (err) {
@@ -47,7 +51,7 @@ function App() {
   const fetchDefects = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3001/api/defects')
+      const res = await fetch(`${API_BASE_URL}/api/defects`)
       const data = await res.json()
       setDefects(data.items || [])
     } catch (err) {
@@ -59,7 +63,7 @@ function App() {
   const fetchIssues = async () => {
     setLoading(true)
     try {
-      const res = await fetch('http://localhost:3001/api/issues')
+      const res = await fetch(`${API_BASE_URL}/api/issues`)
       const data = await res.json()
       setIssues(data.items || [])
     } catch (err) {
@@ -72,7 +76,7 @@ function App() {
   const handleCreateIssue = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('http://localhost:3001/api/issues', {
+      const res = await fetch(`${API_BASE_URL}/api/issues`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...newIssue, status: 'Todo' })
@@ -89,7 +93,7 @@ function App() {
 
   const handleIssueStatusChange = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/issues/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/issues/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -104,7 +108,7 @@ function App() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/stats')
+      const res = await fetch(`${API_BASE_URL}/api/stats`)
       const data = await res.json()
       setStats(data)
     } catch (err) {
@@ -114,7 +118,7 @@ function App() {
 
   const fetchTrends = async () => {
     try {
-      const res = await fetch('http://localhost:3001/api/trends')
+      const res = await fetch(`${API_BASE_URL}/api/trends`)
       const data = await res.json()
       setTrendData(data)
     } catch (err) {
@@ -135,7 +139,7 @@ function App() {
   const handleCreateDefect = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('http://localhost:3001/api/defects', {
+      const res = await fetch(`${API_BASE_URL}/api/defects`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...newDefect, status: 'Open' })
@@ -152,7 +156,7 @@ function App() {
 
   const handleDefectStatusChange = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/defects/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/defects/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
@@ -168,7 +172,7 @@ function App() {
   const handleCreateItem = async (e: React.FormEvent) => {
     e.preventDefault()
     try {
-      const res = await fetch('http://localhost:3001/api/test-items', {
+      const res = await fetch(`${API_BASE_URL}/api/test-items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -188,7 +192,7 @@ function App() {
 
   const handleStatusChange = async (id: string, newStatus: string) => {
     try {
-      const res = await fetch(`http://localhost:3001/api/test-items/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/test-items/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
