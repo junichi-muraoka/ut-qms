@@ -4,15 +4,47 @@ import {
   AreaChart, Area
 } from 'recharts'
 
+type Priority = 'Critical' | 'High' | 'Medium' | 'Low';
+type TestStatus = 'NoRun' | 'Pass' | 'Fail' | 'Blocked';
+type DefectStatus = 'Open' | 'Investigating' | 'Fixed' | 'Verified' | 'Closed';
+type IssueStatus = 'Todo' | 'InProgress' | 'Done';
+
+interface TestItem {
+  id: string;
+  title: string;
+  precondition: string;
+  expectedResult: string;
+  status: TestStatus;
+  updatedAt: string;
+}
+
+interface Defect {
+  id: string;
+  title: string;
+  description: string;
+  priority: Priority;
+  status: DefectStatus;
+  testItemId: string;
+  updatedAt: string;
+}
+
+interface Issue {
+  id: string;
+  title: string;
+  description: string;
+  priority: Priority;
+  status: IssueStatus;
+}
+
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3001'
   : 'https://qraft.j-muraoka-secure.workers.dev'
 
 function App() {
   const [activeTab, setActiveTab] = useState('test-items')
-  const [testItems, setTestItems] = useState([])
-  const [defects, setDefects] = useState([])
-  const [issues, setIssues] = useState([])
+  const [testItems, setTestItems] = useState<TestItem[]>([])
+  const [defects, setDefects] = useState<Defect[]>([])
+  const [issues, setIssues] = useState<Issue[]>([])
   const [loading, setLoading] = useState(false)
 
   const [showAddForm, setShowAddForm] = useState(false)
@@ -20,8 +52,8 @@ function App() {
   const [showAddIssueForm, setShowAddIssueForm] = useState(false)
   
   const [newItem, setNewItem] = useState({ title: '', expectedResult: '', precondition: '' })
-  const [newDefect, setNewDefect] = useState({ title: '', description: '', priority: 'Medium' as any, testItemId: '' })
-  const [newIssue, setNewIssue] = useState({ title: '', description: '', priority: 'Medium' as any })
+  const [newDefect, setNewDefect] = useState({ title: '', description: '', priority: 'Medium' as Priority, testItemId: '' })
+  const [newIssue, setNewIssue] = useState({ title: '', description: '', priority: 'Medium' as Priority })
 
   const [stats, setStats] = useState({
     totalTests: 0,
@@ -146,7 +178,7 @@ function App() {
       })
       if (res.ok) {
         setShowAddDefectForm(false)
-        setNewDefect({ title: '', description: '', priority: 'Medium' as any, testItemId: '' })
+        setNewDefect({ title: '', description: '', priority: 'Medium' as Priority, testItemId: '' })
         fetchDefects()
       }
     } catch (err) {
@@ -294,7 +326,7 @@ function App() {
                   <select 
                     className="form-input"
                     value={newIssue.priority}
-                    onChange={e => setNewIssue({...newIssue, priority: e.target.value as any})}
+                    onChange={e => setNewIssue({...newIssue, priority: e.target.value as Priority})}
                   >
                     <option value="Critical">最優先</option>
                     <option value="High">高</option>
@@ -340,7 +372,7 @@ function App() {
                   <select 
                     className="form-input"
                     value={newDefect.priority}
-                    onChange={e => setNewDefect({...newDefect, priority: e.target.value as any})}
+                    onChange={e => setNewDefect({...newDefect, priority: e.target.value as Priority})}
                   >
                     <option value="Critical">最優先</option>
                     <option value="High">高</option>
@@ -356,7 +388,7 @@ function App() {
                     onChange={e => setNewDefect({...newDefect, testItemId: e.target.value})}
                   >
                     <option value="">なし</option>
-                    {testItems.map((item: any) => (
+                    {testItems.map((item: TestItem) => (
                       <option key={item.id} value={item.id}>{item.title}</option>
                     ))}
                   </select>
@@ -429,7 +461,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {testItems.map((item: any) => (
+                  {testItems.map((item: TestItem) => (
                     <tr key={item.id}>
                       <td>{item.title}</td>
                       <td>{item.precondition}</td>
@@ -473,7 +505,7 @@ function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {defects.map((defect: any) => (
+                  {defects.map((defect: Defect) => (
                     <tr key={defect.id}>
                       <td>{defect.title}</td>
                       <td>
@@ -520,7 +552,7 @@ function App() {
                       status === 'Todo' ? '未着手' : 
                       status === 'InProgress' ? '進行中' : '完了'
                     }</h3>
-                    {issues.filter((i: any) => i.status === status).map((issue: any) => (
+                    {issues.filter((i: Issue) => i.status === status).map((issue: Issue) => (
                       <div key={issue.id} className="card" style={{marginBottom: '0.5rem', padding: '1rem', cursor: 'pointer'}}>
                         <div style={{fontWeight: 'bold', marginBottom: '0.5rem'}}>{issue.title}</div>
                         <div style={{fontSize: '0.85rem', color: 'var(--text-secondary)'}}>{issue.description}</div>
