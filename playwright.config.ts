@@ -1,11 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
 /**
- * UT-QMS E2E テスト設定
+ * Qraft E2E テスト設定
  *
  * BASE_URL 環境変数で対象を切り替え可能:
  *   - ローカル: http://localhost:5173 (default)
- *   - Staging: https://ut-qms-staging.pages.dev
+ *   - Staging: https://qraft-staging.pages.dev
  */
 export default defineConfig({
   testDir: './e2e',

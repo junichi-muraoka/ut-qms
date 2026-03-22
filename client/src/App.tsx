@@ -6,7 +6,7 @@ import {
 
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3001'
-  : 'https://ut-qms.j-muraoka-secure.workers.dev'
+  : 'https://qraft.j-muraoka-secure.workers.dev'
 
 function App() {
   const [activeTab, setActiveTab] = useState('test-items')
@@ -208,7 +208,7 @@ function App() {
   return (
     <div className="app-container">
       <aside className="sidebar">
-        <div className="logo">UT-QMS</div>
+        <div className="logo">Qraft</div>
         <nav>
           <ul className="nav-links">
             <li 

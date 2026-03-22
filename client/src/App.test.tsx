@@ -3,9 +3,9 @@ import { expect, test, describe } from 'vitest'
 import App from './App'
 
 describe('App component', () => {
-  test('renders UT-QMS logo', () => {
+  test('renders Qraft logo', () => {
     render(<App />)
-    const logoElement = screen.getByText(/UT-QMS/i)
+    const logoElement = screen.getByText(/Qraft/i)
     expect(logoElement).toBeInTheDocument()
   })
 })

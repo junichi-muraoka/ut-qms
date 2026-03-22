@@ -30,7 +30,7 @@ app.use('*', async (c, next) => {
 const getDb = (c: any) => c.get('db');
 
 app.get('/', (c) => {
-  return c.text('UT-QMS API Running')
+  return c.text('Qraft API Running')
 })
 
 // --- Test Case Management ---

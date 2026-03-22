@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('UT-QMS 基本画面遷移', () => {
+test.describe('Qraft 基本画面遷移', () => {
   test('トップページが表示されること', async ({ page }) => {
     await page.goto('/');
     // サイドバーのロゴが表示される
-    await expect(page.locator('.logo')).toHaveText('UT-QMS');
+    await expect(page.locator('.logo')).toHaveText('Qraft');
     // ナビゲーションが存在する
     await expect(page.locator('.nav-links')).toBeVisible();
   });
@@ -34,7 +34,7 @@ test.describe('UT-QMS 基本画面遷移', () => {
   });
 });
 
-test.describe('UT-QMS テスト項目 CRUD', () => {
+test.describe('Qraft テスト項目 CRUD', () => {
   test('テスト項目の新規作成フォームが開閉できること', async ({ page }) => {
     await page.goto('/');
     await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
@@ -51,7 +51,7 @@ test.describe('UT-QMS テスト項目 CRUD', () => {
   });
 });
 
-test.describe('UT-QMS 課題管理カンバン', () => {
+test.describe('Qraft 課題管理カンバン', () => {
   test('カンバンボードの列（未着手・進行中・完了）が表示されること', async ({ page }) => {
     await page.goto('/');
     await page.locator('.nav-item', { hasText: '課題管理' }).click();
