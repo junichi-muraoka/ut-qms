@@ -29,7 +29,7 @@ export default defineConfig({
   ],
 
   /* ローカルテスト時にクライアント開発サーバーを自動起動 */
-  webServer: process.env.CI ? undefined : {
+  webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
     command: 'npm run dev --prefix client',
     url: 'http://localhost:5173',
     reuseExistingServer: true,
