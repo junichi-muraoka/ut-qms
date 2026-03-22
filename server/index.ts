@@ -9,7 +9,11 @@ type Bindings = {
   DB: D1Database
 }
 
-const app = new Hono<{ Bindings: Bindings }>()
+type Variables = {
+  db: any // Drizzle DB type is complex, using any here for simplicity in middleware
+}
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 app.use('/*', cors())
 
@@ -23,7 +27,7 @@ app.use('*', async (c, next) => {
     // Local (better-sqlite3)
     db = await getLocalDb();
   }
-  c.set('db' as any, db);
+  c.set('db', db);
   await next();
 });
 
