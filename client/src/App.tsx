@@ -542,8 +542,6 @@ function App() {
           <section className="card">
             {loading ? (
               <p>読み込み中...</p>
-            ) : issues.length === 0 ? (
-              <p>課題データがありません。「新規作成」から登録してください。</p>
             ) : (
               <div className="kanban-board" style={{display: 'flex', gap: '1rem', overflowX: 'auto'}}>
                 {['Todo', 'InProgress', 'Done'].map(status => (
@@ -574,6 +572,11 @@ function App() {
                         </select>
                       </div>
                     ))}
+                    {issues.filter((i: Issue) => i.status === status).length === 0 && (
+                      <p style={{fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '1rem'}}>
+                        アイテムなし
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
