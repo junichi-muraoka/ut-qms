@@ -9,6 +9,8 @@
     "forceConsistentCasingInFileNames": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    "lib": ["ESNext"],
+    "types": ["@cloudflare/workers-types"],
     "outDir": "./dist",
     "rootDirs": ["./", "../shared"]
   },

@@ -9,7 +9,11 @@ type Bindings = {
   DB: D1Database
 }
 
-const app = new Hono<{ Bindings: Bindings }>()
+type Variables = {
+  db: any // Drizzle DB type is complex, using any here for simplicity in middleware
+}
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 app.use('/*', cors())
 
@@ -23,14 +27,14 @@ app.use('*', async (c, next) => {
     // Local (better-sqlite3)
     db = await getLocalDb();
   }
-  c.set('db' as any, db);
+  c.set('db', db);
   await next();
 });
 
 const getDb = (c: any) => c.get('db');
 
 app.get('/', (c) => {
-  return c.text('UT-QMS API Running')
+  return c.text('Qraft API Running')
 })
 
 // --- Test Case Management ---
@@ -269,7 +273,7 @@ app.get('/api/trends', async (c) => {
   }))
   progressTrend[6] = {
     date: today,
-    remaining: currentIssues.length - currentIssues.filter(i => i.status === 'Done').length,
+    remaining: currentIssues.length - currentIssues.filter((i: any) => i.status === 'Done').length,
     ideal: Math.max(0, totalIssuesEnvisaged - 18)
   }
 
@@ -281,7 +285,7 @@ app.get('/api/trends', async (c) => {
   qualityTrend[6] = {
     date: today,
     defects: currentDefects.length,
-    passRate: currentTests.length > 0 ? (currentTests.filter(i => i.status === 'Pass').length / currentTests.length) * 100 : 0
+    passRate: currentTests.length > 0 ? (currentTests.filter((i: any) => i.status === 'Pass').length / currentTests.length) * 100 : 0
   }
 
   return c.json({ progressTrend, qualityTrend })
@@ -294,16 +298,16 @@ app.get('/api/stats', async (c) => {
   const allIssues = await db.query.issues.findMany()
 
   const totalTests = allTests.length
-  const passCount = allTests.filter(i => i.status === 'Pass').length
-  const failCount = allTests.filter(i => i.status === 'Fail').length
+  const passCount = allTests.filter((i: any) => i.status === 'Pass').length
+  const failCount = allTests.filter((i: any) => i.status === 'Fail').length
   
   const testPassRate = totalTests > 0 ? (passCount / totalTests) * 100 : 0
   
   const totalDefects = allDefects.length
-  const openDefects = allDefects.filter(d => d.status !== 'Closed').length
+  const openDefects = allDefects.filter((d: any) => d.status !== 'Closed').length
   
   const totalIssues = allIssues.length
-  const doneIssues = allIssues.filter(i => i.status === 'Done').length
+  const doneIssues = allIssues.filter((i: any) => i.status === 'Done').length
   const progress = totalIssues > 0 ? (doneIssues / totalIssues) * 100 : 0
 
   return c.json({

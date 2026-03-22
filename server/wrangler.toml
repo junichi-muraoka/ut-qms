@@ -1,4 +1,4 @@
-name = "ut-qms"
+name = "qraft"
 main = "index.ts"
 compatibility_date = "2024-11-25"
 compatibility_flags = [ "nodejs_compat" ]
@@ -8,6 +8,16 @@ compatibility_flags = [ "nodejs_compat" ]
 
 [[d1_databases]]
 binding = "DB"
-database_name = "ut-qms-db"
+database_name = "qraft-db"
 database_id = "9844bf0a-8208-449e-ae32-514064d65542"
+migrations_dir = "drizzle"
+
+# ===== Staging Environment =====
+[env.staging]
+name = "qraft-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "qraft-db-staging"
+database_id = "88abf121-b0bc-4ea2-9b45-db4cd162fd67"
 migrations_dir = "drizzle"

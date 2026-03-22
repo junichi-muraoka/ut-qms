@@ -1,2 +1,3 @@
-# ut-qms
-Unit Test &amp; Quality Management Suite
+# Qraft
+
+Quality Management Suite — 品質を見える化して管理するツール
