@@ -19,5 +19,5 @@ name = "qraft-staging"
 [[env.staging.d1_databases]]
 binding = "DB"
 database_name = "qraft-db-staging"
-database_id = "<STAGING_DB_ID>"  # TODO: Cloudflare ダッシュボードで作成後に記入
+database_id = "88abf121-b0bc-4ea2-9b45-db4cd162fd67"
 migrations_dir = "drizzle"
