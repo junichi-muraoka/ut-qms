@@ -19,6 +19,36 @@
 
 Qraftは、ソフトウェア開発における「品質」を可視化し、一元管理するための品質管理スイートです。モダンな技術スタック（React 19 & Hono）を採用し、エッジ環境での超高速な応答性能を実現しています。
 
+## 📚 ドキュメント (Documentation)
+
+プロジェクトの全体像を把握するための詳細ドキュメントは以下の通りです。
+
+- [**要件定義書 (Requirements)**](./docs/requirements.md): プロジェクトの目的、背景、機能一覧。
+- [**機能仕様書 (Functional Specifications)**](./docs/functional_specifications.md): 画面遷移、UI/UX、バリデーションルール。
+- [**アーキテクチャ設計 (Architecture)**](./docs/architecture.md): システム構成、ER図、技術選定理由。
+- [**Cloudflare 構成概要**](./docs/cloudflare_overview.md): エッジ環境のインフラ詳細。
+- [**開発ワークフロー**](./docs/development_workflow.md): Git運用、CI/CDプロセス。
+
+## 📸 ビジュアル・ツアー (Visual Tour)
+
+Qraft の直感的な管理インターフェースをご紹介します。
+
+#### ダッシュボード
+開発状況と品質指標をリアルタイムに可視化します。
+![Dashboard](./docs/images/dashboard.png)
+
+#### 課題管理 (Issues Board)
+プロジェクトのタスクをステータスごとに整理・管理します。
+![Issues Board](./docs/images/issues_board.png)
+
+#### テスト項目書 (Test Cases)
+テストシナリオの設計と実行結果を記録します。
+![Test Cases](./docs/images/test_cases.png)
+
+#### 不具合管理 (Defects)
+検出されたバグの追跡と修正状況を管理します。
+![Defects](./docs/images/defects.png)
+
 ## ✨ 注目機能 (Key Features)
 
 - **📈 品質の可視化**: テスト通過率や欠陥密度を Recharts で美しくグラフ化。
@@ -46,7 +76,7 @@ Qraftは、ソフトウェア開発における「品質」を可視化し、一
 ├── server/          # バックエンド (Hono / Workers)
 ├── shared/          # 共有型定義・バリデーション (TypeScript / Zod)
 ├── e2e/             # E2Eテスト (Playwright)
-├── docs/            # 開発マニュアル・環境定義
+├── docs/            # 日本語ドキュメント・環境定義
 └── scripts/         # 開発・運用向けユーティリティ
 ```
 
@@ -63,7 +93,7 @@ npm install
 
 | 対象 | コマンド | 詳細 |
 | :--- | :--- | :--- |
-| **Backend** | `npm run server` | Port 3000 で API を起動 |
+| **Backend** | `npm run server` | Port 3001 で API を起動 |
 | **Frontend** | `npm run client` | Vite デブサーバーを起動 |
 
 ## 🌐 実行環境

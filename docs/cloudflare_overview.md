@@ -1,36 +1,47 @@
-# インフラ構成：Cloudflare 採用の背景と役割
+# Cloudflare 構成概要 (Infrastructure Overview)
 
-本プロジェクト（Qraft）では、高速かつセキュアな実行環境を低コストで実現するため、Cloudflare のエッジコンピューティング技術を全面的に採用しています。
+Qraft は、Cloudflare の提供するサーバーレスプラットフォームをフル活用することで、ゼロ・インフラ管理と高いスケーラビリティを両立しています。
 
-![Qraft 稼働イメージ](./images/qraft_infrastructure_concept.png)
+## 1. コンポーネント構成
 
-## 1. Cloudflare 採用の 3 つのメリット
+```mermaid
+graph LR
+    User[ユーザーブラウザ] --> Pages[Cloudflare Pages<br/>Frontend Hosting]
+    Pages --> Workers[Cloudflare Workers<br/>Edge Runtime API]
+    Workers --> D1[(Cloudflare D1<br/>Serverless DB)]
+    Workers --> KV[Cloudflare KV<br/>Configuration/Cache]
+```
 
-### ⚡️ エッジでの高速処理 (Performance)
-従来のサーバーとは異なり、世界中に分散された「エッジ」でプログラム（Hono / Workers）を実行します。ユーザーに最も近い場所からレスポンスを返すため、地理的な遅延（レイテンシ）を最小限に抑えられます。
+## 2. 各サービスの詳細
 
-### 🛡️ 多層的なセキュリティ (Security)
-WAF（Web Application Firewall）や DDoS 保護が標準で組み込まれています。悪意のあるトラフィックをインフラ層で遮断し、アプリケーションの安全を自動的に守ります。
+### Cloudflare Pages
+- **役割**: 静的アセット（HTML, JS, CSS）のホスティング。
+- **機能**: Web Analytics による利用状況の可視化、プレビューデプロイ機能。
 
-### 🚀 シームレスなデプロイ (Developer Experience)
-GitHub との強力な連携により、コードをプッシュするだけでフロントエンド（Pages）とバックエンド（Workers）を即座に更新できます。今回のプラットフォーム選定において最も重視したポイントです。
+### Cloudflare Workers (Hono)
+- **役割**: バックエンド API ロジックの実行。
+- **利点**: 世界中に配置されたエッジで動作するため、レイテンシが極めて低い（Cold start がほぼゼロ）。
 
-## 2. コストパフォーマンスと信頼性
+### Cloudflare D1
+- **役割**: リレーショナルデータベース (SQLite)。
+- **特徴**: 型安全な Drizzle ORM と組み合わせることで、堅牢なデータ永続化を実現。
 
-> [!TIP]
-> **なぜ無料で運用できるのか？**
-> Cloudflare には非常に寛容な「Free Plan」が用意されています。これはリソースの上限（リクエスト数など）に達すると課金されるのではなく、動作が一時停止する仕組みのため、意図しない高額請求のリスクがありません。
+## 3. インフラ・ダイヤグラム
 
-### 採用技術との親和性
-バックエンドに使用している **Hono** は、Cloudflare Workers の性能を最大限に引き出すために設計されたフレームワークです。この組み合わせにより、サーバーレス環境でありながら非常に高い応答性能を実現しています。
+```mermaid
+sequenceDiagram
+    participant U as ユーザー
+    participant P as Cloudflare Pages
+    participant W as Cloudflare Workers
+    participant D as Cloudflare D1
+    
+    U->>P: ページアクセス
+    P-->>U: React アプリケーション返却
+    U->>W: API リクエスト (/api/stats)
+    W->>D: クエリ実行 (SQL)
+    D-->>W: 結果返却
+    W-->>U: JSON レスポンス
+```
 
-## 3. インフラ構造の要約
-
-| 機能 | 採用サービス | 主な役割 |
-| :--- | :--- | :--- |
-| **ホスティング** | Cloudflare Pages | React アプリ（フロントエンド）の配信 |
-| **サーバーレス** | Cloudflare Workers | Hono による API（バックエンド）の実行 |
-| **データベース** | Cloudflare D1 | エッジネイティブな SQLite データベース |
-
----
-詳細な環境設定については [実行環境（詳細）](./environments.md) を参照してください。
+> [!NOTE]
+> プロジェクトのデプロイ設定は `.wrangler/` および `wrangler.toml` で管理されています。

@@ -1,47 +1,54 @@
-# 開発ワークフロー：品質とスピードの両立
+# 開発ワークフロー (Development Workflow)
 
-本プロジェクトでは、コードの品質を高い水準で維持しつつ、安全かつ迅速に機能をリリースするため、プルリクエスト（PR）ベースの開発フローを徹底しています。
+本プロジェクトでは、品質を維持しながら高速に開発を進めるために、GitHub Actions を中心とした CICD ワークフローを定義しています。
 
-## 🏹 基本開発サイクル
+## 1. GitHub Flow の採用
 
-### 1. タスクの確認・選定
-[GitHub Issues](https://github.com/junichi-muraoka/ut-qms/issues) から着手するタスクを選び、背景や完了条件を確認します。
-
-### 2. 作業ブランチの作成
-`main` ブランチ（または `develop`）から、目的に応じたブランチを作成します。
-- **機能追加**: `feature/チケット名(英語)`
-- **バグ修正**: `fix/バグ名`
-- 例: `git checkout -b feature/auth-implementation`
-
-### 3. 実装とユニットテスト
-コードを実装すると同時に、対応するユニットテストを `Vitest` で作成します。
-手元の環境でテストが全てパスすることを確認します。
-```bash
-npm run test
+```mermaid
+gitGraph
+    commit id: "Initial"
+    branch develop
+    checkout develop
+    commit id: "Setup"
+    branch feature/new-logic
+    checkout feature/new-logic
+    commit id: "Add logic"
+    commit id: "Add test"
+    checkout develop
+    merge feature/new-logic
+    checkout main
+    merge develop tag: "v1.0.0"
 ```
 
-### 4. プルリクエスト (PR) の作成
-作業が完了したら PR を作成します。
-PR が作成されると、GitHub Actions によって **CI（継続的インテグレーション）** が自動実行されます。
+## 2. 開発ステップ
 
-| チェック項目 | 内容 |
-| :--- | :--- |
-| **Lint** | コード規約のチェック |
-| **Type Check** | TypeScript の型整合性確認 |
-| **Unit Test** | 機能の正当性確認 |
+1. **Issue の選定**: 
+   - 担当する課題（Issue）をアサインします。
+2. **ブランチの作成**:
+   - `develop` から `feature/description` または `fix/description` ブランチを切ります。
+3. **ローカル開発**:
+   - `npm run client` および `npm run server` で動作を確認。
+4. **テストの実行**:
+   - `npm run test` を実行し、回帰テストがパスすることを確認。
+5. **プルリクの作成**:
+   - GitHub 上で `develop` への PR を作成。
 
-### 5. レビューとマージ
-CI が全てグリーン（成功）になった後、必要に応じてコードレビューを行います。
-承認された PR は `main` にマージされます。
+## 3. クオリティ・ゲート (Quality Gate)
 
-### 6. 自動デプロイ (CD)
-マージをトリガーとして、Cloudflare 環境へ自動的にデプロイが行われます。
+PR が作成されると、以下のチェックが自動実行されます。
 
-## 🛡️ クオリティ・ゲート（品質の門番）
+```mermaid
+flowchart TD
+    PR[Pull Request 作成] --> Lint[Lint チェック]
+    Lint --> Test[Unit Test 実行]
+    Test --> E2E[E2E Test 実行]
+    E2E --> Build[Build チェック]
+    Build -- Pass --> Review[メンバージによるレビュー]
+    Build -- Fail --> Fix[修正が必要]
+    Review -- Approve --> Merge[マージ実行]
+```
 
-本プロジェクトの `main` ブランチは保護されています。
-- **CI 失敗時はマージ不可**: テストが通らないコードが本番に混入することを物理的に防ぎます。
-- **デプロイの自動化**: 手動作業によるオペレーションミスを排除します。
+## 4. デプロイ構成
 
----
-詳細は [デプロイ初期設定ガイド](./setup_deployment.md) を参照してください。
+- **Staging**: `develop` ブランチが更新されると、`qraft-staging.pages.dev` に自動デプロイ。
+- **Production**: `main` ブランチが更新（マージ）されると、`qraft.pages.dev` に自動デプロイ。
