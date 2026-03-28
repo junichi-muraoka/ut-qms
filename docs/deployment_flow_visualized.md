@@ -19,9 +19,9 @@ graph TD
         G --> H["検証環境確認 (qraft-staging.pages.dev)"]
     end
 
-    subgraph "リリースフェーズ (Production / main branch)"
-        H -- "検証完了" --> I{Pull Request 作成}
-        I -- "マニュアルマージ" --> J(main branch へマージ)
+    subgraph "リリースフェーズ (Production / GitHub Release)"
+        H -- "検証完了" --> I{PR to main / Merge}
+        I -- "タグ付け" --> J[GitHub Release 作成 / vX.Y.Z]
         J -- "自動トリガー (CD)" --> K[Production 環境へデプロイ]
         K --> L["本番環境稼働 (qraft.pages.dev)"]
     end
