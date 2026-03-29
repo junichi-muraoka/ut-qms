@@ -16,8 +16,10 @@ gitGraph
     commit id: "Add test"
     checkout develop
     merge feature/new-logic
-    checkout main
-    merge develop tag: "v1.0.0"
+    branch release
+    checkout release
+    merge main tag: "v1.1.0"
+    commit id: "GitHub Release"
 ```
 
 ## 2. 開発ステップ
@@ -30,8 +32,11 @@ gitGraph
    - `npm run client` および `npm run server` で動作を確認。
 4. **テストの実行**:
    - `npm run test` を実行し、回帰テストがパスすることを確認。
-5. **プルリクの作成**:
-   - GitHub 上で `develop` への PR を作成。
+5. **プルリクの作成とマージ**:
+   - GitHub 上で `develop` への PR を作成し、マージします。
+6. **リリースノートの作成**:
+   - `main` ブランチへのマージ完了後、GitHub Releases で新規リリースを作成します。
+   - **自動ラベル付与**: リリース公開後、関連する Issue に自動でバージョンラベルが付与されます。
 
 ## 3. クオリティ・ゲート (Quality Gate)
 

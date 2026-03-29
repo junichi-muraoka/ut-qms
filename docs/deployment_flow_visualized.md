@@ -38,7 +38,8 @@ graph TD
 | :--- | :--- | :--- | :--- |
 | **CI チェック** | Lint, 型チェック, 単体テスト | PR 作成 / 更新 | **完全自動** |
 | **Staging デプロイ** | Cloudflare Pages / Workers (Stage) | `develop` ブランチへのマージ | **完全自動** |
-| **Production デプロイ** | Cloudflare Pages / Workers (Prod) | `main` ブランチへのマージ | **完全自動** |
+| **Production デプロイ** | Cloudflare Pages / Workers (Prod) | GitHub Release の公開 | **完全自動** |
+| **Issue 自動ラベル付与** | リリース対象 Issue へのタグ付与 | GitHub Release の公開 | **完全自動** |
 | **PR レビュー** | コード品質、仕様確認 | 人による操作 | 手動 |
 | **Staging 検証** | 動作確認、最終チェック | 人による操作 | 手動 |
 
