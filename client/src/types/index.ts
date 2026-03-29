@@ -37,7 +37,19 @@ export interface Stats {
   progress: number;
 }
 
+export interface ProgressTrendItem {
+  date: string;
+  remaining: number;
+  ideal: number;
+}
+
+export interface QualityTrendItem {
+  date: string;
+  defects: number;
+  passRate: number;
+}
+
 export interface TrendData {
-  progressTrend: any[];
-  qualityTrend: any[];
+  progressTrend: ProgressTrendItem[];
+  qualityTrend: QualityTrendItem[];
 }

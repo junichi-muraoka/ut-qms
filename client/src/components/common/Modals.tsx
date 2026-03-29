@@ -1,9 +1,15 @@
 import React from 'react';
 import type { Priority, TestItem } from '../../types';
 
+interface IssueInput {
+  title: string;
+  description: string;
+  priority: Priority;
+}
+
 interface AddIssueModalProps {
-  newIssue: { title: string, description: string, priority: Priority };
-  setNewIssue: (issue: any) => void;
+  newIssue: IssueInput;
+  setNewIssue: (issue: IssueInput) => void;
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
 }
@@ -54,9 +60,16 @@ export const AddIssueModal: React.FC<AddIssueModalProps> = ({ newIssue, setNewIs
   </div>
 );
 
+interface DefectInput {
+  title: string;
+  description: string;
+  priority: Priority;
+  testItemId: string;
+}
+
 interface AddDefectModalProps {
-  newDefect: { title: string, description: string, priority: Priority, testItemId: string };
-  setNewDefect: (defect: any) => void;
+  newDefect: DefectInput;
+  setNewDefect: (defect: DefectInput) => void;
   testItems: TestItem[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
@@ -121,9 +134,15 @@ export const AddDefectModal: React.FC<AddDefectModalProps> = ({ newDefect, setNe
   </div>
 );
 
+interface TestItemInput {
+  title: string;
+  expectedResult: string;
+  precondition: string;
+}
+
 interface AddTestItemModalProps {
-  newItem: { title: string, expectedResult: string, precondition: string };
-  setNewItem: (item: any) => void;
+  newItem: TestItemInput;
+  setNewItem: (item: TestItemInput) => void;
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
 }
