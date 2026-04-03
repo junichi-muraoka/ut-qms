@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { 
   Priority, TestItem, Defect, Issue, Stats, TrendData 
 } from './types';
@@ -32,8 +32,8 @@ function App() {
   const [testItems, setTestItems] = useState<TestItem[]>([]);
   const [defects, setDefects] = useState<Defect[]>([]);
   const [issues, setIssues] = useState<Issue[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<{ email: string; name?: string } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useState<{ email: string; name?: string; picture?: string } | null>(null);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [showAddDefectForm, setShowAddDefectForm] = useState(false);
@@ -55,60 +55,71 @@ function App() {
     qualityTrend: []
   });
 
-  const fetchUser = async () => {
+  const fetchUser = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/me`);
-      const data = await res.json();
-      if (data.user) {
-        setUser(data.user);
+      const response = await fetch(`${API_BASE_URL}/api/me`, {
+        credentials: 'include',
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUser(data.user || null);
+      } else {
+        setUser(null);
       }
-    } catch (err) {
-      console.error('Failed to fetch user', err);
+    } catch (error) {
+      console.error('Error fetching user:', error);
+      setUser(null);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const handleLogin = () => {
+    window.location.href = `${API_BASE_URL}/api/auth/google/login`;
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, { credentials: 'include' });
+      setUser(null);
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
   const fetchTestItems = async () => {
-    setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/test-items`);
+      const res = await fetch(`${API_BASE_URL}/api/test-items`, { credentials: 'include' });
       const data = await res.json();
       setTestItems(data.items || []);
     } catch (err) {
       console.error('Failed to fetch test items', err);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchDefects = async () => {
-    setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/defects`);
+      const res = await fetch(`${API_BASE_URL}/api/defects`, { credentials: 'include' });
       const data = await res.json();
       setDefects(data.items || []);
     } catch (err) {
       console.error('Failed to fetch defects', err);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchIssues = async () => {
-    setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/api/issues`);
+      const res = await fetch(`${API_BASE_URL}/api/issues`, { credentials: 'include' });
       const data = await res.json();
       setIssues(data.items || []);
     } catch (err) {
       console.error('Failed to fetch issues', err);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchStats = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/stats`);
+      const res = await fetch(`${API_BASE_URL}/api/stats`, { credentials: 'include' });
       const data = await res.json();
       setStats(data);
     } catch (err) {
@@ -118,7 +129,7 @@ function App() {
 
   const fetchTrends = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/trends`);
+      const res = await fetch(`${API_BASE_URL}/api/trends`, { credentials: 'include' });
       const data = await res.json();
       setTrendData(data);
     } catch (err) {
@@ -128,12 +139,17 @@ function App() {
 
   useEffect(() => {
     fetchUser();
-    fetchTestItems();
-    fetchDefects();
-    fetchIssues();
-    fetchStats();
-    fetchTrends();
-  }, []);
+  }, [fetchUser]);
+
+  useEffect(() => {
+    if (user) {
+      fetchTestItems();
+      fetchDefects();
+      fetchIssues();
+      fetchStats();
+      fetchTrends();
+    }
+  }, [user]);
 
   const handleCreateIssue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,7 +157,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/issues`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newIssue, status: 'Todo' })
+        body: JSON.stringify({ ...newIssue, status: 'Todo' }),
+        credentials: 'include'
       });
       if (res.ok) {
         setShowAddIssueForm(false);
@@ -158,7 +175,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/issues/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
+        credentials: 'include'
       });
       if (res.ok) {
         fetchIssues();
@@ -174,7 +192,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/defects`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newDefect, status: 'Open' })
+        body: JSON.stringify({ ...newDefect, status: 'Open' }),
+        credentials: 'include'
       });
       if (res.ok) {
         setShowAddDefectForm(false);
@@ -191,7 +210,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/defects/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
+        credentials: 'include'
       });
       if (res.ok) {
         fetchDefects();
@@ -207,7 +227,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/test-items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...newItem, status: 'NoRun' })
+        body: JSON.stringify({ ...newItem, status: 'NoRun' }),
+        credentials: 'include'
       });
       if (res.ok) {
         setShowAddForm(false);
@@ -224,7 +245,8 @@ function App() {
       const res = await fetch(`${API_BASE_URL}/api/test-items/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: newStatus })
+        body: JSON.stringify({ status: newStatus }),
+        credentials: 'include'
       });
       if (res.ok) {
         fetchTestItems();
@@ -235,20 +257,16 @@ function App() {
   };
 
   const onRefresh = () => {
-    // Refresh logic here
-    console.log('Refresh triggered');
     if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
     else if (activeTab === 'test-items') fetchTestItems();
     else if (activeTab === 'defects') fetchDefects();
     else fetchIssues();
   };
 
-  // If loading, show a simple spinner or nothing
   if (isLoading) {
     return <div className="loading-container">読み込み中...</div>;
   }
 
-  // If not logged in, show login screen
   if (!user) {
     return (
       <div className="login-screen">
@@ -266,7 +284,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="main-content">
         <Header 
           activeTab={activeTab} 
@@ -308,11 +326,13 @@ function App() {
           />
         )}
 
-        {activeTab === 'dashboard' && <Dashboard stats={stats} trendData={trendData} />}
-        {activeTab === 'test-items' && <TestManager testItems={testItems} loading={loading} onStatusChange={handleTestStatusChange} />}
-        {activeTab === 'defects' && <DefectManager defects={defects} loading={loading} onStatusChange={handleDefectStatusChange} />}
-        {activeTab === 'issues' && <IssueBoard issues={issues} loading={loading} onStatusChange={handleIssueStatusChange} />}
-      </main>
+        <main className="content-area">
+          {activeTab === 'dashboard' && <Dashboard stats={stats} trendData={trendData} />}
+          {activeTab === 'test-items' && <TestManager testItems={testItems} loading={false} onStatusChange={handleTestStatusChange} />}
+          {activeTab === 'defects' && <DefectManager defects={defects} loading={false} onStatusChange={handleDefectStatusChange} />}
+          {activeTab === 'issues' && <IssueBoard issues={issues} loading={false} onStatusChange={handleIssueStatusChange} />}
+        </main>
+      </div>
     </div>
   );
 }
