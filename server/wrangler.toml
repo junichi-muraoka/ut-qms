@@ -4,9 +4,9 @@ compatibility_date = "2024-11-25"
 compatibility_flags = [ "nodejs_compat" ]
 
 [vars]
-# Cloudflare Access SSO configuration
-CF_TEAM_DOMAIN = "your-team.cloudflareaccess.com"
-CF_ACCESS_AUD = "your-app-aud-tag"
+GOOGLE_CLIENT_ID = "your-google-client-id.apps.googleusercontent.com"
+SESSION_SECRET = "generate-a-long-random-string-here"
+# REDIRECT_URI is optional, defaults to worker origin
 
 [[d1_databases]]
 binding = "DB"

@@ -234,20 +234,45 @@ function App() {
     }
   };
 
+  const onRefresh = () => {
+    // Refresh logic here
+    console.log('Refresh triggered');
+    if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
+    else if (activeTab === 'test-items') fetchTestItems();
+    else if (activeTab === 'defects') fetchDefects();
+    else fetchIssues();
+  };
+
+  // If loading, show a simple spinner or nothing
+  if (isLoading) {
+    return <div className="loading-container">読み込み中...</div>;
+  }
+
+  // If not logged in, show login screen
+  if (!user) {
+    return (
+      <div className="login-screen">
+        <div className="login-card">
+          <h1>Qraft</h1>
+          <p>品質管理を、もっとスマートに。</p>
+          <button className="btn-primary login-btn" onClick={handleLogin}>
+            Google アカウントでログイン
+          </button>
+          <p className="login-footer">※ クレジットカード登録不要のセキュアログイン</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-container">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      <main className="main-content">
+      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="main-content">
         <Header 
           activeTab={activeTab} 
-          user={user}
-          onRefresh={() => {
-            if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
-            else if (activeTab === 'test-items') fetchTestItems();
-            else if (activeTab === 'defects') fetchDefects();
-            else fetchIssues();
-          }}
+          user={user} 
+          onRefresh={onRefresh}
+          onLogout={handleLogout}
           onNew={() => {
             if (activeTab === 'test-items') setShowAddForm(true);
             else if (activeTab === 'defects') setShowAddDefectForm(true);

@@ -1,13 +1,12 @@
-import React from 'react';
-
 interface HeaderProps {
   activeTab: string;
-  user: { email: string; name?: string } | null;
+  user: { email: string; name?: string; picture?: string } | null;
   onRefresh: () => void;
   onNew: () => void;
+  onLogout: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeTab, user, onRefresh, onNew }) => {
+const Header: React.FC<HeaderProps> = ({ activeTab, user, onRefresh, onNew, onLogout }) => {
   const getTitle = () => {
     switch (activeTab) {
       case 'test-items': return 'テスト項目管理';
@@ -44,11 +43,17 @@ const Header: React.FC<HeaderProps> = ({ activeTab, user, onRefresh, onNew }) =>
         </div>
 
         {user && (
-          <div className="user-profile" title={user.email}>
+          <div className="user-profile" title={user.email} onClick={onLogout}>
             <div className="user-avatar">
-              {user.name ? user.name[0].toUpperCase() : user.email[0].toUpperCase()}
+              {user.picture ? (
+                <img src={user.picture} alt={user.name} />
+              ) : (
+                <span>{user.name?.[0] || user.email[0].toUpperCase()}</span>
+              )}
             </div>
-            <span className="user-email">{user.name || user.email.split('@')[0]}</span>
+            <div className="user-info">
+              <span className="user-name">{user.name || 'User'}</span>
+            </div>
           </div>
         )}
       </div>

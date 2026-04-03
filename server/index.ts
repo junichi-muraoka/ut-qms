@@ -5,12 +5,15 @@ import { getLocalDb, getProductionDb } from './db/index'
 import * as schema from './db/schema'
 import { eq, desc } from 'drizzle-orm'
 
-import { authMiddleware, AuthUser } from './auth'
+import { authMiddleware, AuthUser, getGoogleUser, createSession } from './auth'
+import { deleteCookie } from 'hono/cookie'
 
 type Bindings = {
   DB: D1Database
-  CF_TEAM_DOMAIN: string
-  CF_ACCESS_AUD: string
+  GOOGLE_CLIENT_ID: string
+  GOOGLE_CLIENT_SECRET: string
+  SESSION_SECRET: string
+  REDIRECT_URI?: string
 }
 
 type Variables = {
@@ -20,7 +23,10 @@ type Variables = {
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
-app.use('/*', cors())
+app.use('/*', cors({
+  origin: (origin) => origin, // Allow all origins for dev, but credentials: true is key
+  credentials: true,
+}))
 
 // Middleware to inject DB
 app.use('*', async (c, next) => {
@@ -39,10 +45,44 @@ app.use('*', async (c, next) => {
 // Auth Middleware for all API routes
 app.use('/api/*', authMiddleware);
 
-const getDb = (c: any) => c.get('db');
-
 app.get('/', (c) => {
   return c.text('Qraft API Running')
+})
+
+// --- Authentication Routes ---
+
+app.get('/api/auth/google/login', (c) => {
+  const clientId = c.env.GOOGLE_CLIENT_ID
+  const redirectUri = c.env.REDIRECT_URI || `${new URL(c.req.url).origin}/api/auth/google/callback`
+  const scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+  
+  const url = `https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}&access_type=offline&prompt=consent`
+  
+  return c.redirect(url)
+})
+
+app.get('/api/auth/google/callback', async (c) => {
+  const code = c.req.query('code')
+  if (!code) return c.json({ error: 'Missing code' }, 400)
+
+  try {
+    const user = await getGoogleUser(c, code)
+    await createSession(c, user)
+    
+    // Redirect back to frontend
+    const frontendUrl = c.env.REDIRECT_URI ? new URL(c.env.REDIRECT_URI).origin : new URL(c.req.url).origin
+    // In production/staging, the frontend is on a different domain usually
+    const finalRedirect = c.req.header('referer') || frontendUrl
+    return c.redirect('/')
+  } catch (err) {
+    console.error('Callback error:', err)
+    return c.json({ error: 'Auth failed' }, 500)
+  }
+})
+
+app.get('/api/auth/logout', (c) => {
+  deleteCookie(c, 'qraft_session')
+  return c.json({ success: true })
 })
 
 app.get('/api/me', (c) => {
