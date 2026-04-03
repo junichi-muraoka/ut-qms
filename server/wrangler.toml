@@ -6,7 +6,7 @@ compatibility_flags = [ "nodejs_compat" ]
 [vars]
 GOOGLE_CLIENT_ID = "your-google-client-id.apps.googleusercontent.com"
 SESSION_SECRET = "generate-a-long-random-string-here"
-# REDIRECT_URI is optional, defaults to worker origin
+FRONTEND_URL = "http://localhost:3000"
 
 [[d1_databases]]
 binding = "DB"
@@ -17,6 +17,9 @@ migrations_dir = "drizzle"
 # ===== Staging Environment =====
 [env.staging]
 name = "qraft-staging"
+
+[env.staging.vars]
+FRONTEND_URL = "https://develop.ut-qms.pages.dev"
 
 [[env.staging.d1_databases]]
 binding = "DB"

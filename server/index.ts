@@ -14,6 +14,7 @@ type Bindings = {
   GOOGLE_CLIENT_SECRET: string
   SESSION_SECRET: string
   REDIRECT_URI?: string
+  FRONTEND_URL?: string
 }
 
 type Variables = {
@@ -45,6 +46,8 @@ app.use('*', async (c, next) => {
 // Auth Middleware for all API routes
 app.use('/api/*', authMiddleware);
 
+const getDb = (c: any) => c.get('db');
+
 app.get('/', (c) => {
   return c.text('Qraft API Running')
 })
@@ -70,10 +73,9 @@ app.get('/api/auth/google/callback', async (c) => {
     await createSession(c, user)
     
     // Redirect back to frontend
-    const frontendUrl = c.env.REDIRECT_URI ? new URL(c.env.REDIRECT_URI).origin : new URL(c.req.url).origin
-    // In production/staging, the frontend is on a different domain usually
-    const finalRedirect = c.req.header('referer') || frontendUrl
-    return c.redirect('/')
+    const frontendUrl = c.env.FRONTEND_URL || (new URL(c.req.url).origin.includes('localhost') ? 'http://localhost:3000' : 'https://develop.ut-qms.pages.dev')
+    
+    return c.redirect(frontendUrl)
   } catch (err) {
     console.error('Callback error:', err)
     return c.json({ error: 'Auth failed' }, 500)

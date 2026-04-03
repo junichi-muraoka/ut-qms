@@ -43,7 +43,7 @@ export const createSession = async (c: Context, user: AuthUser) => {
     path: '/',
     httpOnly: true,
     secure: true,
-    sameSite: 'Lax', // Adjust to 'None' if frontend/backend domains are different
+    sameSite: 'None', // Required for cross-site cookies between .pages.dev and .workers.dev
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
 };
