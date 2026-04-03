@@ -5,12 +5,17 @@ import { getLocalDb, getProductionDb } from './db/index'
 import * as schema from './db/schema'
 import { eq, desc } from 'drizzle-orm'
 
+import { authMiddleware, AuthUser } from './auth'
+
 type Bindings = {
   DB: D1Database
+  CF_TEAM_DOMAIN: string
+  CF_ACCESS_AUD: string
 }
 
 type Variables = {
-  db: any // Drizzle DB type is complex, using any here for simplicity in middleware
+  db: any
+  user: AuthUser
 }
 
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
@@ -31,11 +36,19 @@ app.use('*', async (c, next) => {
   await next();
 });
 
+// Auth Middleware for all API routes
+app.use('/api/*', authMiddleware);
+
 const getDb = (c: any) => c.get('db');
 
 app.get('/', (c) => {
   return c.text('Qraft API Running')
 })
+
+app.get('/api/me', (c) => {
+  const user = c.get('user');
+  return c.json({ user });
+});
 
 // --- Test Case Management ---
 

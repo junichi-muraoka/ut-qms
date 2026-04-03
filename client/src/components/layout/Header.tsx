@@ -2,11 +2,12 @@ import React from 'react';
 
 interface HeaderProps {
   activeTab: string;
+  user: { email: string; name?: string } | null;
   onRefresh: () => void;
   onNew: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ activeTab, onRefresh, onNew }) => {
+const Header: React.FC<HeaderProps> = ({ activeTab, user, onRefresh, onNew }) => {
   const getTitle = () => {
     switch (activeTab) {
       case 'test-items': return 'テスト項目管理';
@@ -19,22 +20,36 @@ const Header: React.FC<HeaderProps> = ({ activeTab, onRefresh, onNew }) => {
 
   return (
     <header className="header">
-      <h1>{getTitle()}</h1>
-      <div className="header-actions">
-        {activeTab !== 'dashboard' && (
-          <>
-            <button className="btn-primary" onClick={onRefresh}>更新</button>
-            <button 
-              className="btn-primary" 
-              style={{ marginLeft: '10px' }} 
-              onClick={onNew}
-            >
-              + 新規作成
-            </button>
-          </>
-        )}
-        {activeTab === 'dashboard' && (
-           <button className="btn-primary" onClick={onRefresh}>ダッシュボード更新</button>
+      <div className="header-left">
+        <h1>{getTitle()}</h1>
+      </div>
+      
+      <div className="header-right">
+        <div className="header-actions">
+          {activeTab !== 'dashboard' && (
+            <>
+              <button className="btn-secondary" onClick={onRefresh}>更新</button>
+              <button 
+                className="btn-primary" 
+                style={{ marginLeft: '10px' }} 
+                onClick={onNew}
+              >
+                + 新規作成
+              </button>
+            </>
+          )}
+          {activeTab === 'dashboard' && (
+             <button className="btn-primary" onClick={onRefresh}>ダッシュボード更新</button>
+          )}
+        </div>
+
+        {user && (
+          <div className="user-profile" title={user.email}>
+            <div className="user-avatar">
+              {user.name ? user.name[0].toUpperCase() : user.email[0].toUpperCase()}
+            </div>
+            <span className="user-email">{user.name || user.email.split('@')[0]}</span>
+          </div>
         )}
       </div>
     </header>

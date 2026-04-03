@@ -26,6 +26,7 @@ function App() {
   const [defects, setDefects] = useState<Defect[]>([]);
   const [issues, setIssues] = useState<Issue[]>([]);
   const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState<{ email: string; name?: string } | null>(null);
 
   const [showAddForm, setShowAddForm] = useState(false);
   const [showAddDefectForm, setShowAddDefectForm] = useState(false);
@@ -46,6 +47,18 @@ function App() {
     progressTrend: [],
     qualityTrend: []
   });
+
+  const fetchUser = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/me`);
+      const data = await res.json();
+      if (data.user) {
+        setUser(data.user);
+      }
+    } catch (err) {
+      console.error('Failed to fetch user', err);
+    }
+  };
 
   const fetchTestItems = async () => {
     setLoading(true);
@@ -107,14 +120,13 @@ function App() {
   };
 
   useEffect(() => {
-    if (activeTab === 'dashboard') {
-      fetchStats();
-      fetchTrends();
-    }
-    if (activeTab === 'test-items') fetchTestItems();
-    if (activeTab === 'defects') fetchDefects();
-    if (activeTab === 'issues') fetchIssues();
-  }, [activeTab]);
+    fetchUser();
+    fetchTestItems();
+    fetchDefects();
+    fetchIssues();
+    fetchStats();
+    fetchTrends();
+  }, []);
 
   const handleCreateIssue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -222,6 +234,7 @@ function App() {
       <main className="main-content">
         <Header 
           activeTab={activeTab} 
+          user={user}
           onRefresh={() => {
             if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
             else if (activeTab === 'test-items') fetchTestItems();
