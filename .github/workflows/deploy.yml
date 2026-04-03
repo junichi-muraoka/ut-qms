@@ -67,7 +67,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy client/dist --project-name=ut-qms --branch main
+          command: pages deploy client/dist --project-name=qraft --branch main
 
       - name: Deploy to Staging (Pages)
         if: github.ref == 'refs/heads/develop'
@@ -75,4 +75,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy client/dist --project-name=ut-qms --branch develop
+          command: pages deploy client/dist --project-name=qraft --branch develop
