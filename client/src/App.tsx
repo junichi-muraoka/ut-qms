@@ -16,9 +16,16 @@ import IssueBoard from './components/features/IssueBoard';
 // Common Components
 import { AddIssueModal, AddDefectModal, AddTestItemModal } from './components/common/Modals';
 
-const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-  ? 'http://localhost:3001'
-  : 'https://qraft.j-muraoka-secure.workers.dev';
+const API_BASE_URL = (() => {
+  const hostname = window.location.hostname;
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:3001';
+  }
+  if (hostname.includes('develop.ut-qms.pages.dev')) {
+    return 'https://qraft-staging.j-muraoka-secure.workers.dev';
+  }
+  return 'https://qraft.j-muraoka-secure.workers.dev';
+})();
 
 function App() {
   const [activeTab, setActiveTab] = useState('test-items');
