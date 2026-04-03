@@ -276,7 +276,6 @@ function App() {
           <button className="btn-primary login-btn" onClick={handleLogin}>
             Google アカウントでログイン
           </button>
-          <p className="login-footer">※ クレジットカード登録不要のセキュアログイン</p>
         </div>
       </div>
     );
