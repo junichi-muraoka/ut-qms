@@ -102,8 +102,8 @@ GitHub Actions により、各環境へ自動デプロイされます。
 
 | 環境 | ターゲット | ブランチ | アクセスURL |
 | :--- | :--- | :--- | :--- |
-| **Production** | `qraft` | `main` | GitHub Release 公開時に実行 | [🔗 qraft.pages.dev](https://qraft.pages.dev) |
-| **Staging** | `qraft` | `develop` | プッシュ時に自動デプロイ | [🔗 develop.qraft.pages.dev](https://develop.qraft.pages.dev) |
+| **Production** | `ut-qms` | `main` | GitHub Release 公開時に実行 | [🔗 ut-qms.pages.dev](https://ut-qms.pages.dev) |
+| **Staging** | `ut-qms` | `develop` | プッシュ時に自動デプロイ | [🔗 develop.ut-qms.pages.dev](https://develop.ut-qms.pages.dev) |
 
 詳細は [実行環境（詳細）](./docs/environments.md) をご覧ください。
 
