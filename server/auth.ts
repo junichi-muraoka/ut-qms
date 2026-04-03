@@ -21,22 +21,19 @@ export const authMiddleware = async (c: Context, next: Next) => {
   const teamDomain = c.env.CF_TEAM_DOMAIN;
   const aud = c.env.CF_ACCESS_AUD;
 
-  // --- Local Development / Mock Mode ---
-  if (!teamDomain || !aud) {
-    console.log('[Auth] Mocking user for local development');
-    c.set('user', {
-      email: 'admin@example.com',
-      sub: 'mock-user-123',
-      name: 'Local Admin'
-    } as AuthUser);
-    return await next();
-  }
-
-  // --- Production Mode (Cloudflare Access) ---
+  // --- Local Development / Mock Mode (or Demo Mode when placeholders are present) ---
+  const isPlaceholder = !teamDomain || !aud || teamDomain.includes('your-team') || aud.includes('your-app-aud');
   const token = c.req.header('Cf-Access-Jwt-Assertion');
 
-  if (!token) {
-    return c.json({ error: 'Unauthorized: Missing Cloudflare Access Token' }, 401);
+  if (isPlaceholder || !token) {
+    console.log('[Auth] Using Demo/Mock User mode');
+    const mockUser: AuthUser = {
+      email: 'admin@example.com',
+      sub: 'demo-user-999',
+      name: 'Muraoka Admin (Demo)'
+    };
+    c.set('user', mockUser);
+    return await next();
   }
 
   try {

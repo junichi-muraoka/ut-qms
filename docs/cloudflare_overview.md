@@ -26,6 +26,13 @@ graph LR
 - **役割**: リレーショナルデータベース (SQLite)。
 - **特徴**: 型安全な Drizzle ORM と組み合わせることで、堅牢なデータ永続化を実現。
 
+---
+
+### 🔑 認証基盤 (Cloudflare Zero Trust)
+Qraft は、安全なシングルサインオン (SSO) を実現するために Cloudflare Zero Trust を採用しています。詳細なメリットや設定については、以下のドキュメントを参照してください。
+
+- [**Cloudflare Zero Trust / SSO 導入ガイド**](./cloudflare_zero_trust.md)
+
 ## 3. インフラ・ダイヤグラム
 
 ```mermaid
