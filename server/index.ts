@@ -25,8 +25,15 @@ type Variables = {
 const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 app.use('/*', cors({
-  origin: (origin) => origin, // Allow all origins for dev, but credentials: true is key
+  origin: (origin, c) => {
+    // Explicitly return the origin to avoid '*' wildcard issues with credentials
+    return origin || '*';
+  },
   credentials: true,
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  exposeHeaders: ['Content-Length', 'X-Kuma-Revision'],
+  maxAge: 600,
 }))
 
 // Middleware to inject DB
