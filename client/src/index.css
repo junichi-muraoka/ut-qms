@@ -151,15 +151,15 @@ body {
   border: none;
 }
 
-.login-btn:hover, .login-btn:focus {
-  background: #1d4ed8; /* Darker blue for contrast */
-  color: white !important;
-  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
-}
-
+.login-btn:hover, 
+.login-btn:focus,
 .login-btn:focus-visible {
-  outline: 3px solid #bfdbfe;
-  outline-offset: 2px;
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4) !important;
+  outline: 3px solid #bfdbfe !important;
+  outline-offset: 2px !important;
+  opacity: 1 !important;
 }
 
 .login-btn:active {
