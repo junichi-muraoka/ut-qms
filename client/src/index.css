@@ -20,6 +20,13 @@
   padding: 0;
 }
 
+/* Global button focus visibility */
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid #3b82f6 !important;
+  outline-offset: 2px !important;
+}
+
 body {
   font-family: 'Inter', 'Noto Sans JP', sans-serif;
   background-color: var(--bg-color);
@@ -154,12 +161,10 @@ body {
 .login-btn:hover, 
 .login-btn:focus,
 .login-btn:focus-visible {
-  background-color: #1d4ed8 !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4) !important;
-  outline: 3px solid #bfdbfe !important;
-  outline-offset: 2px !important;
-  opacity: 1 !important;
+  background-color: #1d4ed8;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(29, 78, 216, 0.4);
+  opacity: 1;
 }
 
 .login-btn:active {
@@ -272,8 +277,12 @@ body {
   transition: background 0.2s;
 }
 
-.btn-primary:hover {
-  background: var(--accent-blue-hover);
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:focus-visible {
+  background: #2563eb !important; /* Standardized high-contrast blue */
+  color: #ffffff !important;
+  opacity: 1 !important;
 }
 
 /* Grid & Tables for Test Items */
@@ -359,7 +368,11 @@ body {
   cursor: pointer;
 }
 
-.btn-secondary:hover {
-  background: var(--border-color);
-  color: var(--text-primary);
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:focus-visible {
+  background: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--accent-blue) !important;
+  opacity: 1 !important;
 }
