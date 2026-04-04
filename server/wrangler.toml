@@ -19,7 +19,7 @@ migrations_dir = "drizzle"
 name = "qraft-staging"
 
 [env.staging.vars]
-FRONTEND_URL = "https://develop.ut-qms.pages.dev"
+FRONTEND_URL = "https://develop.qraft.pages.dev"
 
 [[env.staging.d1_databases]]
 binding = "DB"

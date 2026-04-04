@@ -73,7 +73,7 @@ app.get('/api/auth/google/callback', async (c) => {
     await createSession(c, user)
     
     // Redirect back to frontend
-    const frontendUrl = c.env.FRONTEND_URL || (new URL(c.req.url).origin.includes('localhost') ? 'http://localhost:3000' : 'https://develop.ut-qms.pages.dev')
+    const frontendUrl = c.env.FRONTEND_URL || 'https://develop.qraft.pages.dev'
     
     return c.redirect(frontendUrl)
   } catch (err) {

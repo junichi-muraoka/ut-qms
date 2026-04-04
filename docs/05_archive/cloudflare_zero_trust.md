@@ -1,4 +1,11 @@
-# Cloudflare Zero Trust / SSO 導入ガイド
+# [ARCHIVED] Cloudflare Zero Trust (SSO) 設定ガイド
+
+> [!WARNING]
+> このドキュメントは **アーカイブ（過去の記録）** です。
+> Qraft は現在、独自の Google OAuth 2.0 認証基盤へ移行しており、Cloudflare Access は使用していません。
+> 最新の認証構成については [アーキテクチャ設計 (02_architecture/architecture.md)](../02_architecture/architecture.md) を参照してください。
+
+---
 
 Qraft プロジェクトにおける認証基盤として、Cloudflare Zero Trust (Access) を採用しています。このドキュメントでは、その導入理由と仕組みについて解説します。
 

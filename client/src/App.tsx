@@ -21,7 +21,7 @@ const API_BASE_URL = (() => {
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return 'http://localhost:3001';
   }
-  if (hostname.includes('develop.ut-qms.pages.dev')) {
+  if (hostname.includes('develop.qraft.pages.dev')) {
     return 'https://qraft-staging.j-muraoka-secure.workers.dev';
   }
   return 'https://qraft.j-muraoka-secure.workers.dev';

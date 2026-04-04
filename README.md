@@ -23,11 +23,12 @@ Qraftは、ソフトウェア開発における「品質」を可視化し、一
 
 プロジェクトの全体像を把握するための詳細ドキュメントは以下の通りです。
 
-- [**要件定義書 (Requirements)**](./docs/requirements.md): プロジェクトの目的、背景、機能一覧。
-- [**機能仕様書 (Functional Specifications)**](./docs/functional_specifications.md): 画面遷移、UI/UX、バリデーションルール。
-- [**アーキテクチャ設計 (Architecture)**](./docs/architecture.md): システム構成、ER図、技術選定理由。
-- [**Cloudflare 構成概要**](./docs/cloudflare_overview.md): エッジ環境のインフラ詳細。
-- [**開発ワークフロー**](./docs/development_workflow.md): Git運用、CI/CDプロセス。
+- [**要件定義書 (Requirements)**](./docs/01_specifications/requirements.md): プロジェクトの目的、背景、機能一覧。
+- [**機能仕様書 (Functional Specifications)**](./docs/01_specifications/functional_specifications.md): 画面遷移、UI/UX、バリデーションルール。
+- [**アーキテクチャ設計 (Architecture)**](./docs/02_architecture/architecture.md): システム構成、ER図、技術選定理由。
+- [**Google 認証セットアップ**](./docs/02_architecture/google_auth_setup_guide.md): 認証基盤の構成。
+- [**環境定義・実行環境**](./docs/04_operations/environments.md): ステージング・本番環境の詳細。
+- [**開発ワークフロー**](./docs/03_development/development_workflow.md): Git運用、CI/CDプロセス。
 
 ## 📸 ビジュアル・ツアー (Visual Tour)
 
@@ -35,19 +36,19 @@ Qraft の直感的な管理インターフェースをご紹介します。
 
 #### ダッシュボード
 開発状況と品質指標をリアルタイムに可視化します。
-![Dashboard](./docs/images/dashboard.png)
+![Dashboard](./docs/01_specifications/images/dashboard.png)
 
 #### 課題管理 (Issues Board)
 プロジェクトのタスクをステータスごとに整理・管理します。
-![Issues Board](./docs/images/issues_board.png)
+![Issues Board](./docs/01_specifications/images/issues_board.png)
 
 #### テスト項目書 (Test Cases)
 テストシナリオの設計と実行結果を記録します。
-![Test Cases](./docs/images/test_cases.png)
+![Test Cases](./docs/01_specifications/images/test_cases.png)
 
 #### 不具合管理 (Defects)
 検出されたバグの追跡と修正状況を管理します。
-![Defects](./docs/images/defects.png)
+![Defects](./docs/01_specifications/images/defects.png)
 
 ## ✨ 注目機能 (Key Features)
 
@@ -102,10 +103,10 @@ GitHub Actions により、各環境へ自動デプロイされます。
 
 | 環境 | ターゲット | ブランチ | アクセスURL |
 | :--- | :--- | :--- | :--- |
-| **Production** | `qraft` | `main` | GitHub Release 公開時に実行 | [🔗 ut-qms.pages.dev](https://ut-qms.pages.dev) |
-| **Staging** | `qraft` | `develop` | プッシュ時に自動デプロイ | [🔗 develop.ut-qms.pages.dev](https://develop.ut-qms.pages.dev) |
+| **Production** | `qraft` | `main` | GitHub Release 公開時に実行 | [🔗 qraft.pages.dev](https://qraft.pages.dev) |
+| **Staging** | `qraft` | `develop` | プッシュ時に自動デプロイ | [🔗 develop.qraft.pages.dev](https://develop.qraft.pages.dev) |
 
-詳細は [実行環境（詳細）](./docs/environments.md) をご覧ください。
+詳細は [環境定義の詳細](./docs/04_operations/environments.md) をご覧ください。
 
 ## 🏹 開発ワークフロー
 
