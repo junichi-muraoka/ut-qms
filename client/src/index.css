@@ -146,15 +146,19 @@ body {
   border-radius: 12px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  background: var(--primary-color);
+  color: white;
+  border: none;
 }
 
-.login-btn:hover {
-  filter: brightness(1.05);
+.login-btn:hover, .login-btn:focus {
+  background: #1d4ed8; /* Darker blue for contrast */
+  color: white !important;
   box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
 }
 
 .login-btn:focus-visible {
-  outline: 3px solid rgba(var(--primary-color-rgb), 0.5);
+  outline: 3px solid #bfdbfe;
   outline-offset: 2px;
 }
 

@@ -43,17 +43,20 @@ const Header: React.FC<HeaderProps> = ({ activeTab, user, onRefresh, onNew, onLo
         </div>
 
         {user && (
-          <div className="user-profile" title={user.email} onClick={onLogout}>
-            <div className="user-avatar">
-              {user.picture ? (
-                <img src={user.picture} alt={user.name} />
-              ) : (
-                <span>{user.name?.[0] || user.email[0].toUpperCase()}</span>
-              )}
+          <div className="user-section">
+            <div className="user-profile" title={user.email}>
+              <div className="user-avatar">
+                {user.picture ? (
+                  <img src={user.picture} alt={user.name} />
+                ) : (
+                  <span>{user.name?.[0] || user.email[0].toUpperCase()}</span>
+                )}
+              </div>
+              <div className="user-info">
+                <span className="user-name">{user.name || 'User'}</span>
+              </div>
             </div>
-            <div className="user-info">
-              <span className="user-name">{user.name || 'User'}</span>
-            </div>
+            <button className="logout-btn" onClick={onLogout}>ログアウト</button>
           </div>
         )}
       </div>
