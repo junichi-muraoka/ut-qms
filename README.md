@@ -1,7 +1,7 @@
 # Qraft (Quality Management Suite)
 
 <p align="center">
-  <img src="./docs/images/qraft_logo.png" alt="Qraft Banner" width="800">
+  <img src="./docs/01_specifications/images/qraft_banner.png" alt="Qraft Banner" width="800">
 </p>
 
 <p align="center">
