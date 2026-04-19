@@ -125,7 +125,7 @@ const WeeklyReportView: React.FC<WeeklyReportViewProps> = ({ apiBaseUrl, activeS
                 className="form-input" 
                 style={{ width: '200px' }}
                 value={currentDraft.riskLevel as any}
-                onChange={e => setCurrentDraft({...currentDraft, riskLevel: e.target.value})}
+                onChange={e => setCurrentDraft({...currentDraft, riskLevel: e.target.value as any})}
               >
                 <option value="Success">Success (正常)</option>
                 <option value="Warning">Warning (注意)</option>

@@ -446,7 +446,7 @@ function AppContent() {
           {activeTab === 'artifacts' && <ArtifactHub apiBaseUrl={API_BASE_URL} activeSystemId={activeSystemId} />}
           {activeTab === 'weekly-reports' && <WeeklyReportView apiBaseUrl={API_BASE_URL} activeSystemId={activeSystemId} />}
           {activeTab === 'reviews' && <ReviewManager apiBaseUrl={API_BASE_URL} />}
-          {activeTab === 'reports' && <QualityReport apiBaseUrl={API_BASE_URL} trendData={trendData} />}
+          {activeTab === 'reports' && <QualityReport apiBaseUrl={API_BASE_URL} />}
           {activeTab === 'timeline' && <TimelineView currentSystemMilestones={milestones} apiBaseUrl={API_BASE_URL} />}
         </main>
       </div>

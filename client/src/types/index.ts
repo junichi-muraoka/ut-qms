@@ -22,6 +22,8 @@ export interface Defect {
   priority: Priority;
   status: DefectStatus;
   testItemId: string;
+  rootCause?: string;
+  improvement?: string;
   updatedAt: string;
 }
 

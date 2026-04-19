@@ -7,12 +7,11 @@ import type { QualitySummary, TrendData } from '../../types/index';
 
 interface QualityReportProps {
   apiBaseUrl: string;
-  trendData: TrendData;
 }
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#64748b'];
 
-const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl, trendData }) => {
+const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
   const [summary, setSummary] = useState<QualitySummary | null>(null);
   const [verdict, setVerdict] = useState({ id: '', verdictText: '', author: '' });
   const [isEditingVerdict, setIsEditingVerdict] = useState(false);
