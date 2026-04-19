@@ -3,11 +3,10 @@ import type { Milestone, Issue } from '../../types/index';
 
 interface TimelineViewProps {
   currentSystemMilestones: Milestone[];
-  currentSystemIssues: Issue[];
   apiBaseUrl: string;
 }
 
-const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, currentSystemIssues, apiBaseUrl }) => {
+const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, apiBaseUrl }) => {
   const [viewMode, setViewMode] = useState<'system' | 'program'>('system');
   const [allMilestones, setAllMilestones] = useState<Milestone[]>([]);
   const [isLoading, setIsLoading] = useState(false);

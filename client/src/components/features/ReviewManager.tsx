@@ -273,7 +273,7 @@ const ReviewManager: React.FC<ReviewManagerProps> = ({ apiBaseUrl }) => {
 
             <div style={{ borderTop: '1px solid #eee', paddingTop: '24px' }}>
               <h3 style={{ marginBottom: '16px' }}>総評 / サマリー</h3>
-              <div style={{ p: '16px', backgroundColor: '#f9f9f9', borderRadius: '12px', color: '#444', lineHeight: '1.6' }}>
+              <div style={{ padding: '16px', backgroundColor: '#f9f9f9', borderRadius: '12px', color: '#444', lineHeight: '1.6' }}>
                 {selectedReview.summary || 'サマリーが登録されていません。'}
               </div>
             </div>

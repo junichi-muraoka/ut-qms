@@ -164,7 +164,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl, trendData }) 
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie data={typeData} cx="50%" cy="50%" innerRadius={40} outerRadius={60} paddingAngle={5} dataKey="value">
-                  {typeData.map((e, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                  {typeData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
                 <Legend />

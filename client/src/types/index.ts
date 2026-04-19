@@ -150,3 +150,15 @@ export interface QualitySummary {
   causeDist: Record<string, number>;
   updatedAt: string;
 }
+
+export interface WeeklyReport {
+  id: string;
+  systemId: string;
+  weekNumber: number;
+  startDate: string;
+  achievements?: string;
+  pendingIssues?: string;
+  nextSteps?: string;
+  riskLevel: 'Success' | 'Warning' | 'Critical';
+  updatedAt: string;
+}

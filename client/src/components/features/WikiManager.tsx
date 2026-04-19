@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import type { Document, DocumentCategory } from '../../types/index';
+import type { Document } from '../../types/index';
 
 interface WikiManagerProps {
   apiBaseUrl: string;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useSystem } from '../../contexts/SystemContext';
 
 interface SidebarProps {
   activeTab: string;
