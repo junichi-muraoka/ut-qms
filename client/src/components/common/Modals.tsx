@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import type { Priority, TestItem, Milestone } from '../../types/index';
 
 interface MilestoneInput {
@@ -22,7 +22,7 @@ interface IssueInput {
 
 interface AddIssueModalProps {
   newIssue: IssueInput;
-  setNewIssue: (issue: IssueInput) => void;
+  setNewIssue: Dispatch<SetStateAction<IssueInput>>;
   milestones: Milestone[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
@@ -116,7 +116,7 @@ interface DefectInput {
 
 interface AddDefectModalProps {
   newDefect: DefectInput;
-  setNewDefect: (defect: DefectInput) => void;
+  setNewDefect: Dispatch<SetStateAction<DefectInput>>;
   testItems: TestItem[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
@@ -190,7 +190,7 @@ interface TestItemInput {
 
 interface AddTestItemModalProps {
   newItem: TestItemInput;
-  setNewItem: (item: TestItemInput) => void;
+  setNewItem: Dispatch<SetStateAction<TestItemInput>>;
   milestones: Milestone[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
@@ -239,7 +239,7 @@ export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, set
 
 interface AddMilestoneModalProps {
   newMilestone: MilestoneInput;
-  setNewMilestone: (m: MilestoneInput) => void;
+  setNewMilestone: Dispatch<SetStateAction<MilestoneInput>>;
   allMilestones: Milestone[]; // To select dependency from other systems
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;

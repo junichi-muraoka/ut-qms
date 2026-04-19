@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { 
-  Priority, TestItem, Defect, Issue, Stats, TrendData 
+  Priority, TestItem, Defect, Issue, Stats, TrendData, Milestone 
 } from './types/index';
 
 // Layout Components
@@ -13,7 +13,6 @@ import TestManager from './components/features/TestManager';
 import DefectManager from './components/features/DefectManager';
 import IssueBoard from './components/features/IssueBoard';
 import WikiManager from './components/features/WikiManager';
-import ArtifactHub from './components/features/ArtifactHub';
 import ReviewManager from './components/features/ReviewManager';
 import QualityReport from './components/features/QualityReport';
 import TimelineView from './components/features/TimelineView';
@@ -45,7 +44,7 @@ function App() {
 }
 
 function AppContent() {
-  const { activeSystemId, isLoading: isSystemLoading } = useSystem();
+  const { activeSystemId } = useSystem();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     return (localStorage.getItem('theme') as 'light' | 'dark') || 'light';
@@ -330,15 +329,6 @@ function AppContent() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const getTitle = () => {
-    switch (activeTab) {
-      case 'program-tower': return 'プログラム管制塔 (Program Tower)';
-      case 'dashboard': return 'プロジェクト概要 (Dashboard)';
-      case 'artifacts': return 'プロジェクト成果物・エビデンスハブ';
-      case 'weekly-reports': return '週次定例進捗報告';
-      // ...
-    }
-  };
 
   const onRefresh = () => {
     if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
