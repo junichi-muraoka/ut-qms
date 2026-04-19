@@ -14,6 +14,28 @@
   --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
 }
 
+[data-theme="dark"] {
+  --bg-color: #0f172a;
+  --sidebar-bg: #1e293b;
+  --card-bg: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --border-color: #334155;
+  --hover-bg: #334155;
+  --glass-bg: rgba(30, 41, 59, 0.7);
+}
+
+@media print {
+  [data-theme="dark"] {
+    --bg-color: #ffffff;
+    --sidebar-bg: #ffffff;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+    --border-color: #e2e8f0;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -63,23 +85,56 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+}
+
+.nav-section-title {
+  padding: 1.5rem 1.5rem 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .nav-item {
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
+  position: relative;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-.nav-item:hover, .nav-item.active {
-  background: var(--border-color);
+.nav-item:hover {
+  background: var(--hover-bg);
   color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: rgba(59, 130, 246, 0.05);
+  color: var(--accent-blue);
+  font-weight: 700;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--accent-blue);
+  border-radius: 0 4px 4px 0;
+}
+
+.nav-item svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
 
 /* Main Content Styling */

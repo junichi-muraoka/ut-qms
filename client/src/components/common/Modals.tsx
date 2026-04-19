@@ -1,15 +1,28 @@
 import React from 'react';
-import type { Priority, TestItem } from '../../types';
+import type { Priority, TestItem, Milestone } from '../../types/index';
+
+interface MilestoneInput {
+  name: string;
+  startDate: string;
+  dueDate: string;
+  description: string;
+  dependsOnMilestoneId?: string;
+}
 
 interface IssueInput {
   title: string;
   description: string;
   priority: Priority;
+  startDate?: string;
+  dueDate?: string;
+  milestoneId?: string;
 }
+
 
 interface AddIssueModalProps {
   newIssue: IssueInput;
   setNewIssue: (issue: IssueInput) => void;
+  milestones: Milestone[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
 }
@@ -49,6 +62,39 @@ export const AddIssueModal: React.FC<AddIssueModalProps> = ({ newIssue, setNewIs
             <option value="High">高</option>
             <option value="Medium">中</option>
             <option value="Low">低</option>
+          </select>
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
+          <div style={{ flex: 1 }}>
+            <label>開始日</label>
+            <input 
+              type="date" 
+              className="form-input" 
+              value={newIssue.startDate || ''} 
+              onChange={e => setNewIssue({ ...newIssue, startDate: e.target.value })}
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>完了期限</label>
+            <input 
+              type="date" 
+              className="form-input" 
+              value={newIssue.dueDate || ''} 
+              onChange={e => setNewIssue({ ...newIssue, dueDate: e.target.value })}
+            />
+          </div>
+        </div>
+        <div style={{ margin: '1rem 0' }}>
+          <label>マイルストーン (WBS連携)</label>
+          <select 
+            className="form-input"
+            value={newIssue.milestoneId || ''}
+            onChange={e => setNewIssue({ ...newIssue, milestoneId: e.target.value })}
+          >
+            <option value="">なし</option>
+            {milestones.map((m) => (
+              <option key={m.id} value={m.id}>{m.name}</option>
+            ))}
           </select>
         </div>
         <div className="header-actions">
@@ -138,16 +184,18 @@ interface TestItemInput {
   title: string;
   expectedResult: string;
   precondition: string;
+  milestoneId?: string;
 }
 
 interface AddTestItemModalProps {
   newItem: TestItemInput;
   setNewItem: (item: TestItemInput) => void;
+  milestones: Milestone[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
 }
 
-export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, setNewItem, onSave, onClose }) => (
+export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, setNewItem, milestones, onSave, onClose }) => (
   <div className="modal-overlay">
     <div className="card modal-content" style={{ maxWidth: '500px', margin: 'auto' }}>
       <h2>テスト項目の新規作成</h2>
@@ -182,6 +230,110 @@ export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, set
         <div className="header-actions">
           <button type="button" className="btn-secondary" onClick={onClose}>キャンセル</button>
           <button type="submit" className="btn-primary" style={{ marginLeft: '1rem' }}>保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+);
+
+interface AddMilestoneModalProps {
+  newMilestone: MilestoneInput;
+  setNewMilestone: (m: MilestoneInput) => void;
+  allMilestones: Milestone[]; // To select dependency from other systems
+  onSave: (e: React.FormEvent) => void;
+  onClose: () => void;
+}
+
+export const AddMilestoneModal: React.FC<AddMilestoneModalProps> = ({ newMilestone, setNewMilestone, allMilestones, onSave, onClose }) => (
+  <div className="modal-overlay">
+    <div className="card modal-content" style={{ maxWidth: '500px', margin: 'auto' }}>
+      <h2>工程（マイルストーン）の新規作成</h2>
+      <form onSubmit={onSave}>
+        <div style={{ margin: '1rem 0' }}>
+          <label>工程名</label>
+          <input 
+            type="text" 
+            className="form-input" 
+            value={newMilestone.name} 
+            onChange={e => setNewMilestone({ ...newMilestone, name: e.target.value })}
+            required
+          />
+        </div>
+        <div style={{ display: 'flex', gap: '1rem', margin: '1rem 0' }}>
+          <div style={{ flex: 1 }}>
+            <label>開始日</label>
+            <input 
+              type="date" 
+              className="form-input" 
+              value={newMilestone.startDate} 
+              onChange={e => setNewMilestone({ ...newMilestone, startDate: e.target.value })}
+              required
+            />
+          </div>
+          <div style={{ flex: 1 }}>
+            <label>完了日</label>
+            <input 
+              type="date" 
+              className="form-input" 
+              value={newMilestone.dueDate} 
+              onChange={e => setNewMilestone({ ...newMilestone, dueDate: e.target.value })}
+              required
+            />
+          </div>
+        </div>
+        <div style={{ margin: '1rem 0' }}>
+          <label>工程カテゴリ</label>
+          <select 
+            className="form-input"
+            value={newMilestone.category || ''}
+            onChange={e => setNewMilestone({ ...newMilestone, category: e.target.value })}
+            required
+          >
+            <option value="">選択してください...</option>
+            <optgroup label="1. 設計・製造">
+              <option value="Requirements">要件定義</option>
+              <option value="BasicDesign">基本設計</option>
+              <option value="DetailDesign">詳細設計</option>
+              <option value="Build">製造</option>
+            </optgroup>
+            <optgroup label="2. 機能テスト">
+              <option value="UT">単体テスト (UT)</option>
+              <option value="IT-A">内部結合 (IT-A)</option>
+              <option value="IT-B">外部結合 (IT-B)</option>
+              <option value="ST-F">システム機能 (ST-F)</option>
+            </optgroup>
+            <optgroup label="3. 非機能・特殊">
+              <option value="PerfLoad">性能・負荷テスト</option>
+              <option value="SecRecov">セキュリティ・リカバリ</option>
+              <option value="OperMig">移行・運用テスト</option>
+            </optgroup>
+            <optgroup label="4. 最終・切替">
+              <option value="UAT">ユーザ受入 (UAT)</option>
+              <option value="Cutover">本番切替</option>
+            </optgroup>
+          </select>
+        </div>
+        <div style={{ margin: '1rem 0' }}>
+          <label>依存する他工程（オプション）</label>
+          <select 
+            className="form-input"
+            value={newMilestone.dependsOnMilestoneId || ''}
+            onChange={e => setNewMilestone({ ...newMilestone, dependsOnMilestoneId: e.target.value })}
+          >
+            <option value="">なし</option>
+            {allMilestones.map(m => (
+              <option key={m.id} value={m.id}>
+                [{m.systemId?.substring(0,4)}] {m.name}
+              </option>
+            ))}
+          </select>
+          <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>
+            ※ 本工程の開始前に完了している必要がある工程を選択します。
+          </p>
+        </div>
+        <div className="header-actions">
+          <button type="button" className="btn-secondary" onClick={onClose}>キャンセル</button>
+          <button type="submit" className="btn-primary" style={{ marginLeft: '1rem' }}>作成</button>
         </div>
       </form>
     </div>
