@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import type { Milestone, Issue } from '../../types/index';
+import type { Milestone } from '../../types/index';
 
 interface TimelineViewProps {
   currentSystemMilestones: Milestone[];
@@ -26,10 +26,10 @@ const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, ap
   const displayMilestones = viewMode === 'system' ? currentSystemMilestones : allMilestones;
 
   // タイムラインの期間計算 (全表示データの最小開始日〜最大完了日)
-  const { startDate, endDate, daysGrid } = useMemo(() => {
+  const { startDate, daysGrid } = useMemo(() => {
     if (displayMilestones.length === 0) {
       const today = new Date();
-      return { startDate: today, endDate: today, daysGrid: [] };
+      return { startDate: today, daysGrid: [] };
     }
     const dates = displayMilestones.flatMap(m => [new Date(m.startDate || ''), new Date(m.dueDate || '')]);
     const start = new Date(Math.min(...dates.map(d => d.getTime())));
@@ -46,7 +46,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, ap
       days.push(new Date(curr));
       curr.setDate(curr.getDate() + 1);
     }
-    return { startDate: start, endDate: end, daysGrid: days };
+    return { startDate: start, daysGrid: days };
   }, [displayMilestones]);
 
   const dayWidth = 32;
@@ -156,7 +156,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, ap
         <div ref={containerRef} style={{ flex: 1, overflow: 'auto', position: 'relative' }}>
           {/* Timeline Header (Dates) */}
           <div style={{ display: 'flex', height: '60px', borderBottom: '1px solid var(--border-color)', backgroundColor: 'var(--hover-bg)', position: 'sticky', top: 0, zIndex: 20 }}>
-            {daysGrid.map((date, i) => {
+            {daysGrid.map((date) => {
               const dateKey = date.toISOString().split('T')[0];
               const isFirstOfMonth = date.getDate() === 1;
               const isWeekend = date.getDay() === 0 || date.getDay() === 6;

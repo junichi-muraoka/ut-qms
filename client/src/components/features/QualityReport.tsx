@@ -220,7 +220,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl, trendData }) 
                         </span>
                       </td>
                       <td>
-                        {t.defects.length > 0 ? t.defects.map((d, dIdx) => (
+                        {t.defects.length > 0 ? t.defects.map((d: any, dIdx: number) => (
                           <div key={dIdx} style={{ fontSize: '11px', color: d.status === 'Closed' ? '#10b981' : '#ef4444' }}>
                             • {d.title} ({d.status})
                           </div>
