@@ -19,6 +19,7 @@ import QualityReport from './components/features/QualityReport';
 import TimelineView from './components/features/TimelineView';
 import WeeklyReportView from './components/features/WeeklyReportView';
 import ArtifactHub from './components/features/ArtifactHub';
+import ProgramTower from './components/features/ProgramTower';
 import { SystemProvider, useSystem } from './contexts/SystemContext';
 
 // Common Components

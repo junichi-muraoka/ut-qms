@@ -6,6 +6,7 @@ interface MilestoneInput {
   startDate: string;
   dueDate: string;
   description: string;
+  category: string;
   dependsOnMilestoneId?: string;
 }
 
@@ -27,7 +28,7 @@ interface AddIssueModalProps {
   onClose: () => void;
 }
 
-export const AddIssueModal: React.FC<AddIssueModalProps> = ({ newIssue, setNewIssue, onSave, onClose }) => (
+export const AddIssueModal: React.FC<AddIssueModalProps> = ({ newIssue, setNewIssue, milestones, onSave, onClose }) => (
   <div className="modal-overlay">
     <div className="card modal-content" style={{ maxWidth: '500px', margin: 'auto' }}>
       <h2>課題の新規作成</h2>
