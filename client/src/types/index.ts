@@ -24,6 +24,8 @@ export interface Defect {
   testItemId: string;
   rootCause?: string;
   improvement?: string;
+  defectType?: string;
+  causeCategory?: string;
   updatedAt: string;
 }
 

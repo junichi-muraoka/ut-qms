@@ -3,7 +3,7 @@ import {
   PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend,
   BarChart, Bar, XAxis, YAxis, CartesianGrid
 } from 'recharts';
-import type { QualitySummary, TrendData } from '../../types/index';
+import type { QualitySummary } from '../../types/index';
 
 interface QualityReportProps {
   apiBaseUrl: string;

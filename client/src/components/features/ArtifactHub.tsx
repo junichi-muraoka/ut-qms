@@ -118,7 +118,7 @@ const ArtifactHub: React.FC<ArtifactHubProps> = ({ apiBaseUrl, activeSystemId })
                   items.map(d => {
                     const status = getStatusColor(d.approvalStatus);
                     return (
-                      <div key={d.id} style={{ padding: '12px', borderBottom: '1px solid var(--border-color)', lastChild: { borderBottom: 'none' } as any }}>
+                      <div key={d.id} style={{ padding: '12px', borderBottom: '1px solid var(--border-color)' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
                           <span style={{ fontWeight: '500', fontSize: '14px' }}>{d.name}</span>
                           <span style={{ 
