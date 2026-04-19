@@ -838,9 +838,11 @@ import { serve } from '@hono/node-server'
 const port = 3001
 console.log(`Server is running on port ${port}`)
 
-serve({
-  fetch: app.fetch,
-  port
-})
+if (typeof process !== 'undefined' && process.versions && process.versions.node) {
+  serve({
+    fetch: app.fetch,
+    port
+  })
+}
 
 export default app
