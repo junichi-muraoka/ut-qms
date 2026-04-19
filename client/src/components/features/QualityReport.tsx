@@ -202,7 +202,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl, trendData }) 
               </tr>
             </thead>
             <tbody>
-              {summary.traceability && summary.traceability.map((m, mIdx) => (
+              {summary.traceability && summary.traceability.map((m: any, mIdx: number) => (
                 <React.Fragment key={mIdx}>
                   <tr style={{ backgroundColor: '#f3f4f6', fontWeight: 'bold' }}>
                     <td>{m.milestoneName}</td>
@@ -210,7 +210,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl, trendData }) 
                       {m.passedTests} / {m.totalTests} ケース合格 ({m.totalTests > 0 ? (m.passedTests/m.totalTests*100).toFixed(0) : 0}%)
                     </td>
                   </tr>
-                  {m.tests.map((t, tIdx) => (
+                  {m.tests.map((t: any, tIdx: number) => (
                     <tr key={tIdx}>
                       <td style={{ color: '#94a3b8', fontSize: '11px' }}>↳ 同工程内</td>
                       <td>{t.title}</td>

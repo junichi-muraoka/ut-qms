@@ -148,6 +148,16 @@ export interface QualitySummary {
   defectDensity: string;
   defectTypeDist: Record<string, number>;
   causeDist: Record<string, number>;
+  traceability: {
+    milestoneName: string;
+    totalTests: number;
+    passedTests: number;
+    tests: {
+      title: string;
+      status: string;
+      defects: any[];
+    }[];
+  }[];
   updatedAt: string;
 }
 
