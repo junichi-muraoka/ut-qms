@@ -160,6 +160,7 @@ export const issues = sqliteTable('issues', {
 
 export const qualityVerdicts = sqliteTable('quality_verdicts', {
   id: text('id').primaryKey(),
+  systemId: text('system_id').references(() => systems.id),
   verdictText: text('verdict_text').notNull(),
   author: text('author'),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),

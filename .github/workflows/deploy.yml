@@ -23,7 +23,7 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package.json
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install && npm install --prefix server
 
       - name: Deploy to Production
