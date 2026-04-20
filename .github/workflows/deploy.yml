@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: server/package.json
 
       - name: Install Dependencies
-        run: cd server && npm install
+        run: cd server && npm install --ignore-scripts
         env:
           HUSKY: 0
 
@@ -58,7 +58,7 @@ jobs:
           cache-dependency-path: client/package.json
 
       - name: Install Dependencies
-        run: cd client && npm install
+        run: cd client && npm install --ignore-scripts
         env:
           HUSKY: 0
 
