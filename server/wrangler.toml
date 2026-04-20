@@ -6,7 +6,7 @@ compatibility_flags = [ "nodejs_compat" ]
 [vars]
 GOOGLE_CLIENT_ID = "your-google-client-id.apps.googleusercontent.com"
 SESSION_SECRET = "generate-a-long-random-string-here"
-FRONTEND_URL = "http://localhost:3000"
+FRONTEND_URL = "https://qraft.pages.dev"
 
 [[d1_databases]]
 binding = "DB"
