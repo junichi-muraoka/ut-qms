@@ -223,7 +223,7 @@ app.get('/api/test-items', async (c) => {
     where: systemId ? eq(schema.testItems.systemId, systemId) : undefined,
     orderBy: [asc(schema.testItems.id)]
   });
-  return c.json(result);
+  return c.json({ items: result });
 });
 
 app.get('/api/test-items/:id', async (c) => {
