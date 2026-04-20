@@ -182,6 +182,18 @@ function AppContent() {
     }
   }, [activeSystemId]);
 
+  const onRefresh = useCallback(() => {
+    if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
+    else if (activeTab === 'test-items') fetchTestItems();
+    else if (activeTab === 'defects') fetchDefects();
+    else if (activeTab === 'issues') fetchIssues();
+    else if (activeTab === 'reviews') fetchReviews();
+    else if (activeTab === 'reports') { /* Report has its own internal fetch */ }
+    else if (activeTab === 'timeline') { fetchIssues(); fetchMilestones(); }
+    else if (activeTab === 'artifacts') { /* Internal fetch in component */ }
+    else if (activeTab === 'weekly-reports') { /* Internal fetch in component */ }
+  }, [activeTab, fetchStats, fetchTrends, fetchTestItems, fetchDefects, fetchIssues, fetchReviews, fetchMilestones]);
+
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
@@ -330,19 +342,6 @@ function AppContent() {
   useEffect(() => {
     localStorage.setItem('theme', theme);
   }, [theme]);
-
-
-  const onRefresh = useCallback(() => {
-    if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
-    else if (activeTab === 'test-items') fetchTestItems();
-    else if (activeTab === 'defects') fetchDefects();
-    else if (activeTab === 'issues') fetchIssues();
-    else if (activeTab === 'reviews') fetchReviews();
-    else if (activeTab === 'reports') { /* Report has its own internal fetch */ }
-    else if (activeTab === 'timeline') { fetchIssues(); fetchMilestones(); }
-    else if (activeTab === 'artifacts') { /* Internal fetch in component */ }
-    else if (activeTab === 'weekly-reports') { /* Internal fetch in component */ }
-  }, [activeTab, fetchStats, fetchTrends, fetchTestItems, fetchDefects, fetchIssues, fetchReviews, fetchMilestones]);
 
   if (isLoading) {
     return <div className="loading-container">読み込み中...</div>;
