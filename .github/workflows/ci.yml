@@ -41,7 +41,7 @@ jobs:
       run: npx tsc --noEmit --project client/tsconfig.app.json
 
     - name: Sync Database Schema (Test DB)
-      run: npx drizzle-kit push --config=server/drizzle.config.ts --force
+      run: cd server && npx drizzle-kit push --config=drizzle.config.ts --force
       env:
         HUSKY: 0
 
