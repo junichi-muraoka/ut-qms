@@ -12,25 +12,25 @@ test.describe('Qraft 基本画面遷移', () => {
   test('テスト項目タブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
-    await expect(page.locator('.header h1')).toHaveText('テスト項目管理');
+    await expect(page.locator('.header h1')).toHaveText('テスト項目書 (Test Cases)');
   });
 
   test('不具合管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await page.locator('.nav-item', { hasText: '不具合管理' }).click();
-    await expect(page.locator('.header h1')).toHaveText('不具合一覧');
+    await expect(page.locator('.header h1')).toHaveText('不具合管理 (Defects)');
   });
 
   test('課題管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '課題管理' }).click();
-    await expect(page.locator('.header h1')).toHaveText('課題一覧');
+    await page.locator('.nav-item', { hasText: '課題ボード' }).click();
+    await expect(page.locator('.header h1')).toHaveText('課題ボード (Issues)');
   });
 
   test('ダッシュボードタブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await page.locator('.nav-item', { hasText: 'ダッシュボード' }).click();
-    await expect(page.locator('.header h1')).toHaveText('総合ダッシュボード');
+    await expect(page.locator('.header h1')).toHaveText('プロジェクト概要 (Dashboard)');
   });
 });
 
@@ -54,7 +54,7 @@ test.describe('Qraft テスト項目 CRUD', () => {
 test.describe('Qraft 課題管理カンバン', () => {
   test('カンバンボードの列（未着手・進行中・完了）が表示されること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '課題管理' }).click();
+    await page.locator('.nav-item', { hasText: '課題ボード' }).click();
 
     // カンバンの3列が表示される
     await expect(page.locator('h3', { hasText: '未着手' })).toBeVisible();
