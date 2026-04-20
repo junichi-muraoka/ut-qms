@@ -30,9 +30,9 @@ export default defineConfig({
 
   /* ローカルテスト時にクライアントサーバーを自動起動 */
   webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
-    command: 'npm run preview --prefix client -- --port 5173 --host 127.0.0.1',
+    command: 'npm run preview --prefix client -- --port 5173 --host 0.0.0.0',
     url: 'http://127.0.0.1:5173',
-    timeout: 120000,
+    timeout: 180000,
     reuseExistingServer: !process.env.CI,
   },
 });
