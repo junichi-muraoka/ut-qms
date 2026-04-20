@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { 
-  Priority, TestItem, Defect, Issue, Stats, TrendData, Milestone 
+  TestItem, Defect, Issue, Stats, TrendData, Milestone, 
+  MilestoneInput, IssueInput, DefectInput, TestItemInput 
 } from './types/index';
 
 // Layout Components
@@ -61,10 +62,10 @@ function AppContent() {
   const [showAddIssueForm, setShowAddIssueForm] = useState(false);
   const [showAddMilestoneForm, setShowAddMilestoneForm] = useState(false);
   
-  const [newItem, setNewItem] = useState({ title: '', expectedResult: '', precondition: '' });
-  const [newDefect, setNewDefect] = useState({ title: '', description: '', priority: 'Medium' as Priority, testItemId: '' });
-  const [newIssue, setNewIssue] = useState({ title: '', description: '', priority: 'Medium' as Priority, startDate: '', dueDate: '', milestoneId: '' });
-  const [newMilestone, setNewMilestone] = useState({ name: '', startDate: '', dueDate: '', description: '', dependsOnMilestoneId: '' });
+  const [newItem, setNewItem] = useState<TestItemInput>({ title: '', expectedResult: '', precondition: '' });
+  const [newDefect, setNewDefect] = useState<DefectInput>({ title: '', description: '', priority: 'Medium', testItemId: '' });
+  const [newIssue, setNewIssue] = useState<IssueInput>({ title: '', description: '', priority: 'Medium', startDate: '', dueDate: '', milestoneId: '' });
+  const [newMilestone, setNewMilestone] = useState<MilestoneInput>({ name: '', startDate: '', dueDate: '', description: '', category: '', dependsOnMilestoneId: '' });
 
   const [stats, setStats] = useState<Stats>({
     totalTests: 0,
@@ -301,7 +302,7 @@ function AppContent() {
       });
       if (res.ok) {
         setShowAddMilestoneForm(false);
-        setNewMilestone({ name: '', startDate: '', dueDate: '', description: '', dependsOnMilestoneId: '' });
+        setNewMilestone({ name: '', startDate: '', dueDate: '', description: '', category: '', dependsOnMilestoneId: '' });
         fetchMilestones();
       }
     } catch (err) {
@@ -404,7 +405,6 @@ function AppContent() {
           <AddTestItemModal 
             newItem={newItem} 
             setNewItem={setNewItem} 
-            milestones={milestones}
             onSave={handleCreateTestItem} 
             onClose={() => setShowAddForm(false)} 
           />

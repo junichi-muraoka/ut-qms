@@ -176,3 +176,34 @@ export interface WeeklyReport {
   riskLevel: 'Success' | 'Warning' | 'Critical';
   updatedAt: string;
 }
+
+export interface MilestoneInput {
+  name: string;
+  startDate: string;
+  dueDate: string;
+  description: string;
+  category: string;
+  dependsOnMilestoneId: string;
+}
+
+export interface IssueInput {
+  title: string;
+  description: string;
+  priority: Priority;
+  startDate?: string;
+  dueDate?: string;
+  milestoneId?: string;
+}
+
+export interface DefectInput {
+  title: string;
+  description: string;
+  priority: Priority;
+  testItemId: string;
+}
+
+export interface TestItemInput {
+  title: string;
+  expectedResult: string;
+  precondition: string;
+}

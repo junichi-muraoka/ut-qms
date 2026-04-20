@@ -1,24 +1,9 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import type { Priority, TestItem, Milestone } from '../../types/index';
-
-interface MilestoneInput {
-  name: string;
-  startDate: string;
-  dueDate: string;
-  description: string;
-  category: string;
-  dependsOnMilestoneId?: string;
-}
-
-interface IssueInput {
-  title: string;
-  description: string;
-  priority: Priority;
-  startDate?: string;
-  dueDate?: string;
-  milestoneId?: string;
-}
-
+import React from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import type { 
+  Priority, TestItem, Milestone, 
+  MilestoneInput, IssueInput, DefectInput, TestItemInput 
+} from '../../types/index';
 
 interface AddIssueModalProps {
   newIssue: IssueInput;
@@ -107,12 +92,7 @@ export const AddIssueModal: React.FC<AddIssueModalProps> = ({ newIssue, setNewIs
   </div>
 );
 
-interface DefectInput {
-  title: string;
-  description: string;
-  priority: Priority;
-  testItemId: string;
-}
+
 
 interface AddDefectModalProps {
   newDefect: DefectInput;
@@ -181,22 +161,16 @@ export const AddDefectModal: React.FC<AddDefectModalProps> = ({ newDefect, setNe
   </div>
 );
 
-interface TestItemInput {
-  title: string;
-  expectedResult: string;
-  precondition: string;
-  milestoneId?: string;
-}
+
 
 interface AddTestItemModalProps {
   newItem: TestItemInput;
   setNewItem: Dispatch<SetStateAction<TestItemInput>>;
-  milestones: Milestone[];
   onSave: (e: React.FormEvent) => void;
   onClose: () => void;
 }
 
-export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, setNewItem, milestones, onSave, onClose }) => (
+export const AddTestItemModal: React.FC<AddTestItemModalProps> = ({ newItem, setNewItem, onSave, onClose }) => (
   <div className="modal-overlay">
     <div className="card modal-content" style={{ maxWidth: '500px', margin: 'auto' }}>
       <h2>テスト項目の新規作成</h2>
