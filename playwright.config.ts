@@ -28,10 +28,10 @@ export default defineConfig({
     },
   ],
 
-  /* ローカルテスト時にクライアント開発サーバーを自動起動 */
+  /* ローカルテスト時にクライアントサーバーを自動起動 */
   webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
-    command: 'npm run dev --prefix client',
+    command: 'npm run preview --prefix client -- --port 5173',
     url: 'http://localhost:5173',
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 });
