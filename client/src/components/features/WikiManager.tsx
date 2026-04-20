@@ -13,7 +13,7 @@ const WikiManager: React.FC<WikiManagerProps> = ({ apiBaseUrl }) => {
   const [editTitle, setEditTitle] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchDocuments = async () => {
+  const fetchDocuments = React.useCallback(async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/api/documents`, { credentials: 'include' });
       const data = await res.json();
@@ -26,11 +26,11 @@ const WikiManager: React.FC<WikiManagerProps> = ({ apiBaseUrl }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiBaseUrl, selectedDoc]);
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [fetchDocuments]);
 
   const handleSave = async () => {
     if (!selectedDoc) return;

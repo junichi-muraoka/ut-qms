@@ -15,7 +15,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, ap
   // フェッチ処理: Program View の場合は全系統のマイルストーンを取得
   useEffect(() => {
     if (viewMode === 'program') {
-      setIsLoading(true);
+      Promise.resolve().then(() => setIsLoading(true));
       fetch(`${apiBaseUrl}/api/milestones`, { credentials: 'include' })
         .then(res => res.json())
         .then(data => setAllMilestones(data || []))
@@ -41,7 +41,7 @@ const TimelineView: React.FC<TimelineViewProps> = ({ currentSystemMilestones, ap
     end.setDate(0);
 
     const days = [];
-    let curr = new Date(start);
+    const curr = new Date(start);
     while (curr <= end) {
       days.push(new Date(curr));
       curr.setDate(curr.getDate() + 1);

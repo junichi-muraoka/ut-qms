@@ -159,7 +159,7 @@ export interface QualitySummary {
     tests: {
       title: string;
       status: string;
-      defects: any[];
+      defects: Defect[];
     }[];
   }[];
   updatedAt: string;

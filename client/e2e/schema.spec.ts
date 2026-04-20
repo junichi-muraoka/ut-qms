@@ -30,8 +30,8 @@ test.describe('Database Schema Vertical Integration (TC-DB-04)', () => {
         }
         
         const data = await getResp.json();
-        const items = data.items || [];
-        const verifiedItem = items.find((i: any) => i.title.startsWith('E2E Verification Task'));
+        const items = (data.items || []) as Array<Record<string, unknown>>;
+        const verifiedItem = items.find(i => String(i.title).startsWith('E2E Verification Task'));
         
         return {
           success: !!verifiedItem,
@@ -39,8 +39,9 @@ test.describe('Database Schema Vertical Integration (TC-DB-04)', () => {
           allFieldsCleared: verifiedItem ? ('estimatedHours' in verifiedItem) : false,
           item: verifiedItem
         };
-      } catch (e: any) {
-        return { error: 'Browser Exception', message: e.message, stack: e.stack };
+      } catch (e: unknown) {
+        const error = e as Error;
+        return { error: 'Browser Exception', message: error.message, stack: error.stack };
       }
     });
 

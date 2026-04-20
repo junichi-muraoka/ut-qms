@@ -13,23 +13,23 @@ const ReviewManager: React.FC<ReviewManagerProps> = ({ apiBaseUrl }) => {
   const [showAddItem, setShowAddItem] = useState(false);
   const [newReviewItem, setNewReviewItem] = useState({ content: '', severity: 'Medium' as 'Low'|'Medium'|'High' });
 
-  const fetchReviews = async () => {
+  const fetchReviews = React.useCallback(async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/api/reviews`, { credentials: 'include' });
       const data = await res.json();
       setReviews(data.items || []);
       if (data.items?.length > 0 && !selectedReview) {
-        setSelectedReview(data.items[0]);
-        fetchReviewItems(data.items[0].id);
+        // 初期選択時にアイテムもフェッチ
+        return data.items[0];
       }
     } catch (err) {
       console.error('Failed to fetch reviews', err);
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiBaseUrl, selectedReview]);
 
-  const fetchReviewItems = async (reviewId: string) => {
+  const fetchReviewItems = React.useCallback(async (reviewId: string) => {
     try {
       const res = await fetch(`${apiBaseUrl}/api/review-items/review/${reviewId}`, { credentials: 'include' });
       const data = await res.json();
@@ -37,11 +37,16 @@ const ReviewManager: React.FC<ReviewManagerProps> = ({ apiBaseUrl }) => {
     } catch (err) {
       console.error('Failed to fetch review items', err);
     }
-  };
+  }, [apiBaseUrl]);
 
   useEffect(() => {
-    fetchReviews();
-  }, []);
+    fetchReviews().then(initialReview => {
+      if (initialReview) {
+        setSelectedReview(initialReview);
+        fetchReviewItems(initialReview.id);
+      }
+    });
+  }, [fetchReviews, fetchReviewItems]);
 
   const handleReviewStatusChange = async (id: string, newStatus: ReviewStatus) => {
     try {
@@ -211,7 +216,7 @@ const ReviewManager: React.FC<ReviewManagerProps> = ({ apiBaseUrl }) => {
                       <label style={{ display: 'block', fontSize: '13px', fontWeight: 'bold', marginBottom: '8px' }}>重要度</label>
                       <select 
                         value={newReviewItem.severity}
-                        onChange={e => setNewReviewItem({...newReviewItem, severity: e.target.value as any})}
+                        onChange={e => setNewReviewItem({...newReviewItem, severity: e.target.value as ReviewItem['severity']})}
                         style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd' }}
                       >
                         <option value="High">高 (High)</option>

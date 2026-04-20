@@ -20,7 +20,8 @@ import TimelineView from './components/features/TimelineView';
 import WeeklyReportView from './components/features/WeeklyReportView';
 import ArtifactHub from './components/features/ArtifactHub';
 import ProgramTower from './components/features/ProgramTower';
-import { SystemProvider, useSystem } from './contexts/SystemContext';
+import { SystemProvider } from './contexts/SystemProvider';
+import { useSystem } from './contexts/SystemContext';
 
 // Common Components
 import { AddIssueModal, AddDefectModal, AddTestItemModal, AddMilestoneModal } from './components/common/Modals';
@@ -111,7 +112,7 @@ function AppContent() {
     }
   };
 
-  const fetchTestItems = async () => {
+  const fetchTestItems = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/test-items?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -120,9 +121,9 @@ function AppContent() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [activeSystemId]);
 
-  const fetchDefects = async () => {
+  const fetchDefects = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/defects?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -131,9 +132,9 @@ function AppContent() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [activeSystemId]);
 
-  const fetchIssues = async () => {
+  const fetchIssues = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/issues?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -142,9 +143,9 @@ function AppContent() {
     } catch (err) {
       console.error(err);
     }
-  };
+  }, [activeSystemId]);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/stats?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -153,9 +154,9 @@ function AppContent() {
     } catch (err) {
       console.error('Failed to fetch stats', err);
     }
-  };
+  }, [activeSystemId]);
 
-  const fetchTrends = async () => {
+  const fetchTrends = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/trends?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -164,13 +165,13 @@ function AppContent() {
     } catch (err) {
       console.error('Failed to fetch trends', err);
     }
-  };
+  }, [activeSystemId]);
 
-  const fetchReviews = async () => {
+  const fetchReviews = useCallback(async () => {
     // Current ReviewManager fetches its own data, but we can pre-fetch or trigger it here if needed
-  };
+  }, []);
 
-  const fetchMilestones = async () => {
+  const fetchMilestones = useCallback(async () => {
     if (!activeSystemId) return;
     try {
       const res = await fetch(`${API_BASE_URL}/api/milestones?systemId=${activeSystemId}`, { credentials: 'include' });
@@ -179,7 +180,7 @@ function AppContent() {
     } catch (err) {
       console.error('Failed to fetch milestones', err);
     }
-  };
+  }, [activeSystemId]);
 
   useEffect(() => {
     fetchUser();
@@ -189,7 +190,7 @@ function AppContent() {
     if (activeSystemId) {
       onRefresh();
     }
-  }, [activeTab, activeSystemId]);
+  }, [activeTab, activeSystemId, onRefresh]);
 
   useEffect(() => {
     if (user && activeSystemId) {
@@ -200,7 +201,7 @@ function AppContent() {
       fetchTrends();
       fetchMilestones();
     }
-  }, [user, activeSystemId]);
+  }, [user, activeSystemId, fetchTestItems, fetchDefects, fetchIssues, fetchStats, fetchTrends, fetchMilestones]);
 
   const handleCreateIssue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -331,7 +332,7 @@ function AppContent() {
   }, [theme]);
 
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     if (activeTab === 'dashboard') { fetchStats(); fetchTrends(); }
     else if (activeTab === 'test-items') fetchTestItems();
     else if (activeTab === 'defects') fetchDefects();
@@ -341,8 +342,7 @@ function AppContent() {
     else if (activeTab === 'timeline') { fetchIssues(); fetchMilestones(); }
     else if (activeTab === 'artifacts') { /* Internal fetch in component */ }
     else if (activeTab === 'weekly-reports') { /* Internal fetch in component */ }
-    // Wiki and Artifacts have their own internal state/fetching for now
-  };
+  }, [activeTab, fetchStats, fetchTrends, fetchTestItems, fetchDefects, fetchIssues, fetchReviews, fetchMilestones]);
 
   if (isLoading) {
     return <div className="loading-container">読み込み中...</div>;

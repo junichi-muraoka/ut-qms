@@ -20,7 +20,7 @@ const ArtifactHub: React.FC<ArtifactHubProps> = ({ apiBaseUrl, activeSystemId })
     dueDate: new Date().toISOString().split('T')[0]
   });
 
-  const fetchArtifacts = async () => {
+  const fetchArtifacts = React.useCallback(async () => {
     if (!activeSystemId) return;
     setIsLoading(true);
     try {
@@ -36,11 +36,11 @@ const ArtifactHub: React.FC<ArtifactHubProps> = ({ apiBaseUrl, activeSystemId })
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiBaseUrl, activeSystemId]);
 
   useEffect(() => {
     fetchArtifacts();
-  }, [activeSystemId]);
+  }, [fetchArtifacts]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

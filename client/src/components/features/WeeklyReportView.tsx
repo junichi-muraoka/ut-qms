@@ -12,7 +12,7 @@ const WeeklyReportView: React.FC<WeeklyReportViewProps> = ({ apiBaseUrl, activeS
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const fetchReports = async () => {
+  const fetchReports = React.useCallback(async () => {
     if (!activeSystemId) return;
     setIsLoading(true);
     try {
@@ -24,11 +24,11 @@ const WeeklyReportView: React.FC<WeeklyReportViewProps> = ({ apiBaseUrl, activeS
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeSystemId, apiBaseUrl]);
 
   useEffect(() => {
     fetchReports();
-  }, [activeSystemId]);
+  }, [fetchReports]);
 
   const generateDraft = async () => {
     if (!activeSystemId) return;
@@ -124,8 +124,8 @@ const WeeklyReportView: React.FC<WeeklyReportViewProps> = ({ apiBaseUrl, activeS
               <select 
                 className="form-input" 
                 style={{ width: '200px' }}
-                value={currentDraft.riskLevel as any}
-                onChange={e => setCurrentDraft({...currentDraft, riskLevel: e.target.value as any})}
+                value={currentDraft.riskLevel as WeeklyReport['riskLevel']}
+                onChange={e => setCurrentDraft({...currentDraft, riskLevel: e.target.value as WeeklyReport['riskLevel']})}
               >
                 <option value="Success">Success (正常)</option>
                 <option value="Warning">Warning (注意)</option>

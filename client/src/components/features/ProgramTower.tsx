@@ -38,7 +38,7 @@ const ProgramTower: React.FC<{ apiBaseUrl: string; setActiveTab: (tab: string) =
   const [isLoading, setIsLoading] = useState(true);
   const { setActiveSystemId } = useSystem();
 
-  const fetchGlobalSummary = async () => {
+  const fetchGlobalSummary = React.useCallback(async () => {
     try {
       const res = await fetch(`${apiBaseUrl}/api/program/summary`, { credentials: 'include' });
       const data = await res.json();
@@ -48,11 +48,11 @@ const ProgramTower: React.FC<{ apiBaseUrl: string; setActiveTab: (tab: string) =
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiBaseUrl]);
 
   useEffect(() => {
     fetchGlobalSummary();
-  }, []);
+  }, [fetchGlobalSummary]);
 
   const handleSystemClick = (systemId: string) => {
     setActiveSystemId(systemId);

@@ -17,7 +17,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
   const [isEditingVerdict, setIsEditingVerdict] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchSummary = async () => {
+  const fetchSummary = React.useCallback(async () => {
     try {
       const summaryRes = await fetch(`${apiBaseUrl}/api/reports/quality-summary`, { credentials: 'include' });
       const summaryData = await summaryRes.json();
@@ -31,7 +31,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [apiBaseUrl]);
 
   const saveVerdict = async () => {
     try {
@@ -42,14 +42,14 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
         credentials: 'include'
       });
       if (res.ok) setIsEditingVerdict(false);
-    } catch (err) {
+    } catch {
       alert('判定の保存に失敗しました');
     }
   };
 
   useEffect(() => {
     fetchSummary();
-  }, []);
+  }, [fetchSummary]);
 
   if (isLoading) return <div className="p-8">レポート生成中...</div>;
   if (!summary) return <div className="p-8">データの取得に失敗しました。</div>;
@@ -201,7 +201,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
               </tr>
             </thead>
             <tbody>
-              {summary.traceability && summary.traceability.map((m: any, mIdx: number) => (
+              {summary.traceability && summary.traceability.map((m, mIdx: number) => (
                 <React.Fragment key={mIdx}>
                   <tr style={{ backgroundColor: '#f3f4f6', fontWeight: 'bold' }}>
                     <td>{m.milestoneName}</td>
@@ -209,7 +209,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
                       {m.passedTests} / {m.totalTests} ケース合格 ({m.totalTests > 0 ? (m.passedTests/m.totalTests*100).toFixed(0) : 0}%)
                     </td>
                   </tr>
-                  {m.tests.map((t: any, tIdx: number) => (
+                  {m.tests.map((t, tIdx: number) => (
                     <tr key={tIdx}>
                       <td style={{ color: '#94a3b8', fontSize: '11px' }}>↳ 同工程内</td>
                       <td>{t.title}</td>
@@ -219,7 +219,7 @@ const QualityReport: React.FC<QualityReportProps> = ({ apiBaseUrl }) => {
                         </span>
                       </td>
                       <td>
-                        {t.defects.length > 0 ? t.defects.map((d: any, dIdx: number) => (
+                        {t.defects.length > 0 ? t.defects.map((d, dIdx: number) => (
                           <div key={dIdx} style={{ fontSize: '11px', color: d.status === 'Closed' ? '#10b981' : '#ef4444' }}>
                             • {d.title} ({d.status})
                           </div>
