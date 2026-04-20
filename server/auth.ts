@@ -62,7 +62,7 @@ export const authMiddleware = async (c: Context, next: Next) => {
 
   if (!token) {
     // Falls back to Demo/Mock mode if env vars are still placeholders
-    const isPlaceholder = !c.env.GOOGLE_CLIENT_ID || c.env.GOOGLE_CLIENT_ID.includes('your-');
+    const isPlaceholder = !c.env?.GOOGLE_CLIENT_ID || c.env?.GOOGLE_CLIENT_ID.includes('your-');
     if (isPlaceholder) {
       console.log('[Auth] Using Demo/Mock User mode (Placeholders detected)');
       c.set('user', {
