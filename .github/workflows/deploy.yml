@@ -24,7 +24,7 @@ jobs:
           cache-dependency-path: server/package.json
 
       - name: Install Dependencies
-        run: cd server && npm install
+        run: npm install && npm install --prefix server
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
