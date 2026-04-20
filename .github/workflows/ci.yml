@@ -10,6 +10,9 @@ jobs:
   quality:
     runs-on: ubuntu-latest
 
+    env:
+      HUSKY: 0
+
     steps:
     - uses: actions/checkout@v4
 
@@ -20,7 +23,7 @@ jobs:
         cache: 'npm'
 
     - name: Install dependencies
-      run: npm install --ignore-scripts
+      run: npm install
 
     - name: Lint (client)
       run: npm run lint --prefix client

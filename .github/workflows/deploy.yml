@@ -11,6 +11,8 @@ jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     name: Deploy Backend (Workers)
+    env:
+      HUSKY: 0
     steps:
       - uses: actions/checkout@v4
 
@@ -22,9 +24,7 @@ jobs:
           cache-dependency-path: server/package.json
 
       - name: Install Dependencies
-        run: cd server && npm install --ignore-scripts
-        env:
-          HUSKY: 0
+        run: cd server && npm install
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
