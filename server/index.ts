@@ -3,11 +3,12 @@ import { cors } from 'hono/cors'
 import { 
   testItemSchema, defectSchema, issueSchema, 
   documentSchema, milestoneSchema, deliverableSchema,
-  reviewSchema, reviewItemSchema
+  reviewSchema, reviewItemSchema,
+  systemSchema, weeklyReportSchema, qualityVerdictSchema
 } from './shared_schema'
 import { getLocalDb, getProductionDb } from './db/index'
 import * as schema from './db/schema'
-import { eq, desc } from 'drizzle-orm'
+import { eq, desc, asc, and, gte, not } from 'drizzle-orm'
 
 import { authMiddleware, AuthUser, getGoogleUser, createSession } from './auth'
 import { deleteCookie } from 'hono/cookie'
@@ -133,28 +134,28 @@ app.get('/api/program/summary', async (c) => {
   const db = getDb(c);
   const allSystems = await db.query.systems.findMany();
   
-  const summary = await Promise.all(allSystems.map(async (sys) => {
+  const summary = await Promise.all(allSystems.map(async (sys: any) => {
     const sysTests = await db.query.testItems.findMany({ where: eq(schema.testItems.systemId, sys.id) });
     const sysDefects = await db.query.defects.findMany({ where: eq(schema.defects.systemId, sys.id) });
     const sysMilestones = await db.query.milestones.findMany({ where: eq(schema.milestones.systemId, sys.id) });
 
     const totalTests = sysTests.length;
-    const passedTests = sysTests.filter(t => t.status === 'Pass' || t.status === 'PassFixed').length;
+    const passedTests = sysTests.filter((t: any) => t.status === 'Pass' || t.status === 'PassFixed').length;
     const totalDefects = sysDefects.length;
     
     const progress = totalTests > 0 ? (passedTests / totalTests) * 100 : 0;
     const density = totalTests > 0 ? (totalDefects / totalTests) * 100 : 0;
     
     // Risk Calculation logic
-    const hasDelayedMilestone = sysMilestones.some(m => m.status === 'Delayed');
-    const openCriticalDefects = sysDefects.filter(d => d.priority === 'Critical' && d.status !== 'Closed').length;
+    const hasDelayedMilestone = sysMilestones.some((m: any) => m.status === 'Delayed');
+    const openCriticalDefects = sysDefects.filter((d: any) => d.priority === 'Critical' && d.status !== 'Closed').length;
     
     let riskLevel: 'Success' | 'Warning' | 'Critical' = 'Success';
     if (openCriticalDefects > 0 || hasDelayedMilestone) riskLevel = 'Critical';
     else if (density > 15 || progress < 20) riskLevel = 'Warning';
 
     // Current Phase Extraction
-    const activeMilestone = sysMilestones.find(m => m.status === 'Active') || sysMilestones.find(m => m.status === 'Planning');
+    const activeMilestone = sysMilestones.find((m: any) => m.status === 'Active') || sysMilestones.find((m: any) => m.status === 'Planning');
     const currentPhase = activeMilestone?.category || '未設定';
 
     return {
@@ -344,7 +345,7 @@ app.put('/api/defects/:id', async (c) => {
 
   const result = defectSchema.safeParse(updatedDefect)
   if (!result.success) {
-    return c.json({ error: result.error, details: result.error.errors }, 400)
+    return c.json({ error: result.error, details: result.error.issues }, 400)
   }
 
   await db.update(schema.defects).set(result.data as any).where(eq(schema.defects.id, id))
@@ -646,7 +647,7 @@ app.post('/api/weekly-reports/generate', async (c) => {
 
   // 3. Construct Draft
   const achievements = [
-    `【課題完了】: ${recentIssues.length} 件のタスクをクローズしました。 (${recentIssues.map(i => i.title).join(', ')})`,
+    `【課題完了】: ${recentIssues.length} 件のタスクをクローズしました。 (${recentIssues.map((i: any) => i.title).join(', ')})`,
     `【不具合解決】: ${recentDefects.length} 件の修正を確認しました。`,
     `【テスト進捗】: 新たに ${recentTests.length} 件のテストケースが Accept されました。`
   ].join('\n');
@@ -712,36 +713,36 @@ app.get('/api/reports/quality-summary', async (c) => {
   
   const totalTests = allTests.length;
   const totalDefects = allDefects.length;
-  const passedTests = allTests.filter(t => t.status === 'Pass').length;
-  const closedDefects = allDefects.filter(d => d.status === 'Closed').length;
+  const passedTests = allTests.filter((t: any) => t.status === 'Pass').length;
+  const closedDefects = allDefects.filter((d: any) => d.status === 'Closed').length;
   
   const defectDensity = totalTests > 0 ? (totalDefects / totalTests) * 100 : 0;
   
-  const defectTypeDist = allDefects.reduce((acc, d) => {
+  const defectTypeDist = allDefects.reduce((acc: Record<string, number>, d: any) => {
     const type = d.defectType || 'Unknown';
     acc[type] = (acc[type] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
-  const causeDist = allDefects.reduce((acc, d) => {
+  const causeDist = allDefects.reduce((acc: Record<string, number>, d: any) => {
     const cause = d.causeCategory || 'Unknown';
     acc[cause] = (acc[cause] || 0) + 1;
     return acc;
   }, {} as Record<string, number>);
 
   // Traceability: Milestone -> Tests
-  const traceability = allMilestones.map(m => {
-    const milestoneTests = allTests.filter(t => t.milestoneId === m.id);
-    const mPass = milestoneTests.filter(t => t.status === 'Pass').length;
+  const traceability = allMilestones.map((m: any) => {
+    const milestoneTests = allTests.filter((t: any) => t.milestoneId === m.id);
+    const mPass = milestoneTests.filter((t: any) => t.status === 'Pass').length;
     const mTotal = milestoneTests.length;
     return {
       milestoneName: m.name,
       totalTests: mTotal,
       passedTests: mPass,
-      tests: milestoneTests.map(t => ({
+      tests: milestoneTests.map((t: any) => ({
         title: t.title,
         status: t.status,
-        defects: allDefects.filter(d => d.testItemId === t.id).map(d => ({ title: d.title, status: d.status }))
+        defects: allDefects.filter((d: any) => d.testItemId === t.id).map((d: any) => ({ title: d.title, status: d.status }))
       }))
     };
   });

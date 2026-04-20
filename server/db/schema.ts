@@ -157,3 +157,10 @@ export const issues = sqliteTable('issues', {
   assignedTo: text('assigned_to'),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
 });
+
+export const qualityVerdicts = sqliteTable('quality_verdicts', {
+  id: text('id').primaryKey(),
+  verdictText: text('verdict_text').notNull(),
+  author: text('author'),
+  updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+});
