@@ -28,11 +28,19 @@ export default defineConfig({
     },
   ],
 
-  /* ローカルテスト時にクライアントサーバーを自動起動 */
-  webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
-    command: 'npm run preview --prefix client',
-    url: 'http://127.0.0.1:4173',
-    timeout: 180000,
-    reuseExistingServer: !process.env.CI,
-  },
+  /* ローカルテスト時にフロントエンドとバックエンドの両方を自動起動 */
+  webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : [
+    {
+      command: 'npm run preview --prefix client',
+      url: 'http://localhost:4173',
+      timeout: 180000,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run dev --prefix server',
+      url: 'http://localhost:3001/api/health',
+      timeout: 180000,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });
