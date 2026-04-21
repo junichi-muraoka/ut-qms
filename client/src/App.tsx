@@ -151,7 +151,12 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/stats?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setStats(data);
+      setStats(data && typeof data === 'object' && 'totalTests' in data ? data : {
+        totalTests: 0,
+        testPassRate: 0,
+        openDefects: 0,
+        progress: 0
+      });
     } catch (err) {
       console.error('Failed to fetch stats', err);
     }
@@ -162,7 +167,10 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/trends?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setTrendData(data);
+      setTrendData(data && typeof data === 'object' && 'progressTrend' in data ? data : {
+        progressTrend: [],
+        qualityTrend: []
+      });
     } catch (err) {
       console.error('Failed to fetch trends', err);
     }

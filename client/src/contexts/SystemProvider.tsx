@@ -13,7 +13,7 @@ export const SystemProvider: React.FC<{ children: React.ReactNode; apiBaseUrl: s
     try {
       const res = await fetch(`${apiBaseUrl}/api/systems`, { credentials: 'include' });
       const data = await res.json();
-      setSystems(data);
+      setSystems(Array.isArray(data) ? data : []);
       
       if (!activeSystemId && data.length > 0) {
         setActiveSystemId(data[0].id);

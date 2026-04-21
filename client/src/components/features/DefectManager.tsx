@@ -58,7 +58,7 @@ const DefectManager: React.FC<DefectManagerProps> = ({ apiBaseUrl, defects, load
               </tr>
             </thead>
             <tbody>
-              {defects.map((defect) => (
+              {(defects || []).map((defect) => (
                 <tr 
                   key={defect.id} 
                   onClick={() => handleSelect(defect)}
