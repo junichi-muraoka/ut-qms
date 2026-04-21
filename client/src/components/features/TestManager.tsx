@@ -46,7 +46,7 @@ const TestManager: React.FC<TestManagerProps> = ({ testItems, loading, onStatusC
                 </td>
                 <td>{new Date(item.updatedAt).toLocaleString('ja-JP')}</td>
               </tr>
-            ))}
+            )) : null}
           </tbody>
         </table>
       )}

@@ -43,7 +43,7 @@ const IssueBoard: React.FC<IssueBoardProps> = ({ issues, loading, onStatusChange
                     <option value="Done">完了</option>
                   </select>
                 </div>
-              ))}
+              )) : null}
               {issues.filter((i) => i.status === status).length === 0 && (
                 <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '1rem' }}>
                   アイテムなし

@@ -92,7 +92,7 @@ const DefectManager: React.FC<DefectManagerProps> = ({ apiBaseUrl, defects, load
                     </select>
                   </td>
                 </tr>
-              ))}
+              )) : null}
             </tbody>
           </table>
         )}
