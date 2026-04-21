@@ -10,7 +10,8 @@
   "scripts": {
     "server": "npx tsx watch server/index.ts",
     "client": "npm run dev --prefix client",
-    "test:e2e": "npx playwright test"
+    "test:e2e": "npx playwright test",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@hono/node-server": "^1.19.11",
@@ -19,6 +20,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "hono": "^4.12.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
     "zod": "^4.3.6"

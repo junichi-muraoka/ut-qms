@@ -5,30 +5,118 @@ export type IssueStatus = 'Todo' | 'InProgress' | 'Done';
 
 export interface TestItem {
   id: string;
+  systemId?: string;
   title: string;
   precondition: string;
   expectedResult: string;
   status: TestStatus;
+  milestoneId?: string;
   updatedAt: string;
 }
 
 export interface Defect {
   id: string;
+  systemId?: string;
   title: string;
   description: string;
   priority: Priority;
   status: DefectStatus;
   testItemId: string;
+  rootCause?: string;
+  improvement?: string;
+  defectType?: string;
+  causeCategory?: string;
   updatedAt: string;
 }
 
 export interface Issue {
   id: string;
+  systemId?: string;
   title: string;
   description: string;
   priority: Priority;
   status: IssueStatus;
+  startDate?: string;
+  dueDate?: string;
+  milestoneId?: string;
 }
+
+// --- Wiki & Documents ---
+
+export type DocumentCategory = 'Proposal' | 'MeetingMinutes' | 'Rule' | 'Manual' | 'Other';
+
+export interface Document {
+  id: string;
+  title: string;
+  content?: string;
+  category: DocumentCategory;
+  createdBy?: string;
+  updatedAt: string;
+}
+
+// --- Milestones & Deliverables ---
+
+export type MilestoneStatus = 'Planning' | 'Active' | 'Completed' | 'Delayed';
+
+export interface Milestone {
+  id: string;
+  systemId?: string;
+  name: string;
+  description?: string;
+  startDate: string;
+  dueDate: string;
+  criteria?: string;
+  status: MilestoneStatus;
+  category?: string;
+  dependsOnMilestoneId?: string;
+  updatedAt: string;
+}
+
+export type DeliverableStatus = 'Pending' | 'Submitted' | 'Approved';
+
+export interface Deliverable {
+  id: string;
+  milestoneId: string;
+  name: string;
+  description?: string;
+  status: DeliverableStatus;
+  category?: string;
+  approvalStatus?: string;
+  dueDate?: string;
+  documentId?: string;
+  externalUrl?: string;
+  updatedAt: string;
+}
+
+// --- Reviews ---
+
+export type ReviewStatus = 'Todo' | 'InReview' | 'Fixed' | 'Closed';
+
+export interface Review {
+  id: string;
+  title: string;
+  targetDate: string;
+  reviewers?: string;
+  summary?: string;
+  status: ReviewStatus;
+  updatedAt: string;
+}
+
+export type ReviewItemStatus = 'Open' | 'Fixed' | 'Closed';
+
+export interface ReviewItem {
+  id: string;
+  reviewId: string;
+  content: string;
+  severity: 'Low' | 'Medium' | 'High';
+  category?: string;
+  assignedTo?: string;
+  status: ReviewItemStatus;
+  defectId?: string;
+  updatedAt: string;
+}
+
+// --- Stats & Trends ---
 
 export interface Stats {
   totalTests: number;
@@ -52,4 +140,70 @@ export interface QualityTrendItem {
 export interface TrendData {
   progressTrend: ProgressTrendItem[];
   qualityTrend: QualityTrendItem[];
+}
+
+// --- Reports ---
+
+export interface QualitySummary {
+  totalTests: number;
+  passedTests: number;
+  totalDefects: number;
+  closedDefects: number;
+  defectDensity: string;
+  defectTypeDist: Record<string, number>;
+  causeDist: Record<string, number>;
+  traceability: {
+    milestoneName: string;
+    totalTests: number;
+    passedTests: number;
+    tests: {
+      title: string;
+      status: string;
+      defects: Defect[];
+    }[];
+  }[];
+  updatedAt: string;
+}
+
+export interface WeeklyReport {
+  id: string;
+  systemId: string;
+  weekNumber: number;
+  startDate: string;
+  achievements?: string;
+  pendingIssues?: string;
+  nextSteps?: string;
+  riskLevel: 'Success' | 'Warning' | 'Critical';
+  updatedAt: string;
+}
+
+export interface MilestoneInput {
+  name: string;
+  startDate: string;
+  dueDate: string;
+  description: string;
+  category: string;
+  dependsOnMilestoneId: string;
+}
+
+export interface IssueInput {
+  title: string;
+  description: string;
+  priority: Priority;
+  startDate?: string;
+  dueDate?: string;
+  milestoneId?: string;
+}
+
+export interface DefectInput {
+  title: string;
+  description: string;
+  priority: Priority;
+  testItemId: string;
+}
+
+export interface TestItemInput {
+  title: string;
+  expectedResult: string;
+  precondition: string;
 }

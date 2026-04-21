@@ -26,7 +26,7 @@ const TestManager: React.FC<TestManagerProps> = ({ testItems, loading, onStatusC
             </tr>
           </thead>
           <tbody>
-            {testItems.map((item) => (
+            {Array.isArray(testItems) ? testItems.map((item) => (
               <tr key={item.id}>
                 <td>{item.title}</td>
                 <td>{item.precondition}</td>
@@ -46,7 +46,7 @@ const TestManager: React.FC<TestManagerProps> = ({ testItems, loading, onStatusC
                 </td>
                 <td>{new Date(item.updatedAt).toLocaleString('ja-JP')}</td>
               </tr>
-            ))}
+            )) : null}
           </tbody>
         </table>
       )}

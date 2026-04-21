@@ -10,6 +10,9 @@ jobs:
   quality:
     runs-on: ubuntu-latest
 
+    env:
+      HUSKY: 0
+
     steps:
     - uses: actions/checkout@v4
 
@@ -19,8 +22,14 @@ jobs:
         node-version: '20'
         cache: 'npm'
 
-    - name: Install dependencies
+    - name: Install root dependencies
       run: npm install
+
+    - name: Install client dependencies
+      run: npm install --prefix client
+
+    - name: Install server dependencies
+      run: npm install --prefix server
 
     - name: Lint (client)
       run: npm run lint --prefix client
@@ -30,6 +39,11 @@ jobs:
 
     - name: Type Check (client)
       run: npx tsc --noEmit --project client/tsconfig.app.json
+
+    - name: Sync Database Schema (Test DB)
+      run: cd server && npx drizzle-kit push --config=drizzle.config.ts --force
+      env:
+        HUSKY: 0
 
     - name: Test (server)
       run: npm run test --prefix server
@@ -46,4 +60,4 @@ jobs:
     - name: Run E2E Tests
       run: npm run test:e2e
       env:
-        BASE_URL: ${{ vars.STAGING_URL || 'http://localhost:5173' }}
+        BASE_URL: ${{ vars.STAGING_URL || 'http://localhost:4173' }}

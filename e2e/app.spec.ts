@@ -1,46 +1,86 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Qraft 基本画面遷移', () => {
+  test.beforeEach(async ({ page }) => {
+    // ブラウザコンソールのエラーをキャッチして CI ログに出力
+    page.on('console', msg => {
+      if (msg.type() === 'error') console.log(`BROWSER ERROR: ${msg.text()}`);
+    });
+    page.on('pageerror', err => {
+      console.log(`BROWSER PAGE ERROR: ${err.message}`);
+    });
+  });
+
   test('トップページが表示されること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     // サイドバーのロゴが表示される
     await expect(page.locator('.logo')).toHaveText('Qraft');
-    // ナビゲーションが存在する
-    await expect(page.locator('.nav-links')).toBeVisible();
+    // サイドバー全体が表示されている
+    await expect(page.locator('.sidebar')).toBeVisible();
+    // 特定のナビゲーション項目が表示されている
+    await expect(page.locator('.nav-item').first()).toBeVisible();
   });
 
   test('テスト項目タブに遷移できること', async ({ page }) => {
-    await page.goto('/');
-    await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
-    await expect(page.locator('.header h1')).toHaveText('テスト項目管理');
+    try {
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('.sidebar')).toBeVisible();
+      await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
+      const heading = page.locator('header h1, .header h1').first();
+      await heading.waitFor({ timeout: 10000 });
+      await expect(heading).toHaveText('テスト項目書 (Test Cases)');
+    } catch (e) {
+      console.log('--- DIAGNOSTIC: PAGE CONTENT START ---');
+      console.log(await page.content());
+      console.log('--- DIAGNOSTIC: PAGE CONTENT END ---');
+      throw e;
+    }
   });
 
   test('不具合管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '不具合管理' }).click();
-    await expect(page.locator('.header h1')).toHaveText('不具合一覧');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '不具合管理' }).click();
+    const heading = page.locator('header h1, .header h1').first();
+    await heading.waitFor();
+    await expect(heading).toHaveText('不具合管理 (Defects)');
   });
 
   test('課題管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '課題管理' }).click();
-    await expect(page.locator('.header h1')).toHaveText('課題一覧');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
+    const heading = page.locator('header h1, .header h1').first();
+    await heading.waitFor();
+    await expect(heading).toHaveText('課題ボード (Issues)');
   });
 
   test('ダッシュボードタブに遷移できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: 'ダッシュボード' }).click();
-    await expect(page.locator('.header h1')).toHaveText('総合ダッシュボード');
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: 'ダッシュボード' }).click();
+    const heading = page.locator('header h1, .header h1').first();
+    await heading.waitFor();
+    await expect(heading).toHaveText('プロジェクト概要 (Dashboard)');
   });
 });
 
 test.describe('Qraft テスト項目 CRUD', () => {
   test('テスト項目の新規作成フォームが開閉できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
 
     // 新規作成ボタンをクリック
-    await page.locator('button', { hasText: '新規作成' }).click();
+    const newBtn = page.locator('button', { hasText: /新規作成/ }).first();
+    await newBtn.waitFor();
+    await newBtn.click();
     // モーダルが表示される
     await expect(page.locator('.modal-overlay')).toBeVisible();
     await expect(page.locator('h2', { hasText: 'テスト項目の新規作成' })).toBeVisible();
@@ -54,7 +94,9 @@ test.describe('Qraft テスト項目 CRUD', () => {
 test.describe('Qraft 課題管理カンバン', () => {
   test('カンバンボードの列（未着手・進行中・完了）が表示されること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '課題管理' }).click();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
 
     // カンバンの3列が表示される
     await expect(page.locator('h3', { hasText: '未着手' })).toBeVisible();

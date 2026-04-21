@@ -6,10 +6,13 @@ on:
   release:
     types: [ published ]
   workflow_dispatch:
+
 jobs:
   deploy-backend:
     runs-on: ubuntu-latest
     name: Deploy Backend (Workers)
+    env:
+      HUSKY: 0
     steps:
       - uses: actions/checkout@v4
 
@@ -20,8 +23,8 @@ jobs:
           cache: 'npm'
           cache-dependency-path: server/package.json
 
-      - name: Install Dependencies
-        run: cd server && npm install
+      - name: Install dependencies
+        run: npm install && npm install --prefix server
 
       - name: Deploy to Production
         if: github.ref == 'refs/heads/main'
@@ -55,7 +58,9 @@ jobs:
           cache-dependency-path: client/package.json
 
       - name: Install Dependencies
-        run: cd client && npm install
+        run: cd client && npm install --ignore-scripts
+        env:
+          HUSKY: 0
 
       - name: Build Frontend
         run: cd client && npm run build
@@ -66,7 +71,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy client/dist --project-name=qraft
+          command: pages deploy client/dist --project-name=qraft --branch main
 
       - name: Deploy to Staging (Pages)
         if: github.ref == 'refs/heads/develop'
@@ -74,4 +79,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy client/dist --project-name=qraft-staging
+          command: pages deploy client/dist --project-name=qraft --branch develop

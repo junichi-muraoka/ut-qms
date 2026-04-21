@@ -1,37 +1,40 @@
-name: 🛠 作業タスク (Task)
-description: 新機能の実装や基盤構築のタスクを起票します。
-title: "[カテゴリ] タイトル"
-labels: ["task"]
+name: 🛠 開発タスク (Task)
+description: 実装設計と検証計画（エビデンス添付）を統合した詳細タスク
+title: "[Category] Task Title"
+labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        具体的で測定可能なタスクを定義してください。
+        ## 🎯 目的 / 背景
+        [このタスクで解決したい課題やビジョンを記述]
+
   - type: textarea
-    id: background
+    id: implementation-design
     attributes:
-      label: 🎯 背景・目的
-      description: なぜこの作業が必要なのか、簡潔に記述してください。
-      placeholder: "例: ロジックの修正が他に影響しないよう、自動テストを導入したい。"
+      label: 🛠 実装設計 (Implementation Design)
+      description: テーブル定義、カラム名、データ型、外部キー制約、ロジックの詳細を記述
+      placeholder: "- テーブル名: xxx\n- カラム: yyy (integer)\n- ロジック: zzz..."
     validations:
       required: true
-  - type: textarea
-    id: acceptance_criteria
+
+  - type: markdown
     attributes:
-      label: ✅ 完了条件 (Acceptance Criteria)
-      description: 何をもってこのタスクが「完了」したとみなすか、チェックリスト形式で記述してください。
       value: |
-        - [ ] 
-        - [ ] 
-    validations:
-      required: true
+        ---
+        ## 📊 検証項目 & 合否判定 (Unit / E2E / Progress)
+
+        | No. | 種別 | 検証項目 | 判定基準（「正しい」の定義） | 提出エビデンス | 🔍 完了 |
+        | :--- | :--- | :--- | :--- | :--- | :--: |
+        | **01** | **Unit** | **[検証対象]** | [何が起きれば正解か] | [どのログ/画像を添付するか] | `[ ]` |
+
   - type: textarea
-    id: task_list
+    id: dod
     attributes:
-      label: 📋 詳細タスク
-      description: 実施する具体的な手順を記述してください。
+      label: ✅ 最終完了条件 (Definition of Done)
       value: |
-        - [ ] 
-        - [ ] 
+        - [ ] 実装が上記設計と 100% 一致していること。
+        - [ ] 全ての検証項目で「🔍 完了」チェックが埋まっていること。
+        - [ ] 各チェックに対応するエビデンスが、Issue コメントに漏れなく添付されていること。
     validations:
       required: true

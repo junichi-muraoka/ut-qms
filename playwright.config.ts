@@ -16,7 +16,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'html',
 
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:4173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -28,10 +28,19 @@ export default defineConfig({
     },
   ],
 
-  /* ローカルテスト時にクライアント開発サーバーを自動起動 */
-  webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
-    command: 'npm run dev --prefix client',
-    url: 'http://localhost:5173',
-    reuseExistingServer: true,
-  },
+  /* ローカルテスト時にフロントエンドとバックエンドの両方を自動起動 */
+  webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : [
+    {
+      command: 'npm run preview --prefix client',
+      url: 'http://localhost:4173',
+      timeout: 180000,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run dev --prefix server',
+      url: 'http://localhost:3001/',
+      timeout: 180000,
+      reuseExistingServer: !process.env.CI,
+    },
+  ],
 });
