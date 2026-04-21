@@ -2,8 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Database Schema Vertical Integration (TC-DB-04)', () => {
   test('should successfully write and read newly added fields via API', async ({ page }) => {
-    const baseUrl = 'http://localhost:5173';
-    await page.goto(baseUrl);
+    await page.goto('/');
 
     const result = await page.evaluate(async () => {
       try {
