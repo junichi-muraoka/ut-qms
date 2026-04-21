@@ -5,8 +5,10 @@ test.describe('Qraft 基本画面遷移', () => {
     await page.goto('/');
     // サイドバーのロゴが表示される
     await expect(page.locator('.logo')).toHaveText('Qraft');
-    // ナビゲーションが存在する
-    await expect(page.locator('.nav-links')).toBeVisible();
+    // サイドバー全体が表示されている
+    await expect(page.locator('.sidebar')).toBeVisible();
+    // 特定のナビゲーション項目が表示されている
+    await expect(page.locator('.nav-item').first()).toBeVisible();
   });
 
   test('テスト項目タブに遷移できること', async ({ page }) => {
