@@ -13,36 +13,40 @@ test.describe('Qraft 基本画面遷移', () => {
 
   test('テスト項目タブに遷移できること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
-    const heading = page.locator('.header').getByRole('heading', { level: 1 });
+    const heading = page.locator('header h1, .header h1').first();
     await heading.waitFor();
     await expect(heading).toHaveText('テスト項目書 (Test Cases)');
   });
 
   test('不具合管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: '不具合管理' }).click();
-    const heading = page.locator('.header').getByRole('heading', { level: 1 });
+    const heading = page.locator('header h1, .header h1').first();
     await heading.waitFor();
     await expect(heading).toHaveText('不具合管理 (Defects)');
   });
 
   test('課題管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
-    const heading = page.locator('.header').getByRole('heading', { level: 1 });
+    const heading = page.locator('header h1, .header h1').first();
     await heading.waitFor();
     await expect(heading).toHaveText('課題ボード (Issues)');
   });
 
   test('ダッシュボードタブに遷移できること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: 'ダッシュボード' }).click();
-    const heading = page.locator('.header').getByRole('heading', { level: 1 });
+    const heading = page.locator('header h1, .header h1').first();
     await heading.waitFor();
     await expect(heading).toHaveText('プロジェクト概要 (Dashboard)');
   });
@@ -51,11 +55,12 @@ test.describe('Qraft 基本画面遷移', () => {
 test.describe('Qraft テスト項目 CRUD', () => {
   test('テスト項目の新規作成フォームが開閉できること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
 
-    // 新規作成ボタンをクリック (Header内のものに限定)
-    const newBtn = page.locator('.header').getByRole('button', { name: /新規作成/ });
+    // 新規作成ボタンをクリック
+    const newBtn = page.locator('button', { hasText: /新規作成/ }).first();
     await newBtn.waitFor();
     await newBtn.click();
     // モーダルが表示される
@@ -71,6 +76,7 @@ test.describe('Qraft テスト項目 CRUD', () => {
 test.describe('Qraft 課題管理カンバン', () => {
   test('カンバンボードの列（未着手・進行中・完了）が表示されること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     await expect(page.locator('.sidebar')).toBeVisible();
     await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
 
