@@ -29,7 +29,8 @@ import { AddIssueModal, AddDefectModal, AddTestItemModal, AddMilestoneModal } fr
 const API_BASE_URL = (() => {
   const hostname = window.location.hostname;
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
-    return 'http://localhost:3001';
+    // Relative path to utilize Vite proxy for stable cookie/CORS handling
+    return '';
   }
   if (hostname.includes('develop.qraft.pages.dev') || hostname.includes('develop.ut-qms.pages.dev')) {
     return 'https://qraft-staging.j-muraoka-secure.workers.dev';
