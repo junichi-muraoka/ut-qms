@@ -16,7 +16,7 @@ export default defineConfig({
   reporter: process.env.CI ? 'github' : 'html',
 
   use: {
-    baseURL: process.env.BASE_URL || 'http://localhost:5173',
+    baseURL: process.env.BASE_URL || 'http://localhost:4173',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
@@ -30,8 +30,8 @@ export default defineConfig({
 
   /* ローカルテスト時にクライアントサーバーを自動起動 */
   webServer: (process.env.BASE_URL && !process.env.BASE_URL.includes('localhost')) ? undefined : {
-    command: 'cd client && npm run preview -- --port 5173 --host 127.0.0.1',
-    url: 'http://127.0.0.1:5173',
+    command: 'npx vite preview client/dist --port 4173 --host 0.0.0.0',
+    url: 'http://127.0.0.1:4173',
     timeout: 180000,
     reuseExistingServer: !process.env.CI,
   },
