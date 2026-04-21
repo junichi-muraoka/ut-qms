@@ -834,7 +834,6 @@ app.get('/api/stats', async (c) => {
 
 import { serve } from '@hono/node-server'
 
-// ... existing code ...
 
 const port = 3001
 console.log(`Server is running on port ${port}`)

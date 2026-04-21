@@ -38,7 +38,7 @@ export default defineConfig({
     },
     {
       command: 'npm run dev --prefix server',
-      url: 'http://localhost:3001/api/health',
+      url: 'http://localhost:3001/',
       timeout: 180000,
       reuseExistingServer: !process.env.CI,
     },
