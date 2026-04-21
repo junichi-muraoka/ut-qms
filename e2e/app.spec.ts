@@ -1,8 +1,19 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Qraft 基本画面遷移', () => {
+  test.beforeEach(async ({ page }) => {
+    // ブラウザコンソールのエラーをキャッチして CI ログに出力
+    page.on('console', msg => {
+      if (msg.type() === 'error') console.log(`BROWSER ERROR: ${msg.text()}`);
+    });
+    page.on('pageerror', err => {
+      console.log(`BROWSER PAGE ERROR: ${err.message}`);
+    });
+  });
+
   test('トップページが表示されること', async ({ page }) => {
     await page.goto('/');
+    await page.waitForLoadState('networkidle');
     // サイドバーのロゴが表示される
     await expect(page.locator('.logo')).toHaveText('Qraft');
     // サイドバー全体が表示されている
@@ -12,13 +23,20 @@ test.describe('Qraft 基本画面遷移', () => {
   });
 
   test('テスト項目タブに遷移できること', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
-    await expect(page.locator('.sidebar')).toBeVisible();
-    await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
-    const heading = page.locator('header h1, .header h1').first();
-    await heading.waitFor();
-    await expect(heading).toHaveText('テスト項目書 (Test Cases)');
+    try {
+      await page.goto('/');
+      await page.waitForLoadState('networkidle');
+      await expect(page.locator('.sidebar')).toBeVisible();
+      await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
+      const heading = page.locator('header h1, .header h1').first();
+      await heading.waitFor({ timeout: 10000 });
+      await expect(heading).toHaveText('テスト項目書 (Test Cases)');
+    } catch (e) {
+      console.log('--- DIAGNOSTIC: PAGE CONTENT START ---');
+      console.log(await page.content());
+      console.log('--- DIAGNOSTIC: PAGE CONTENT END ---');
+      throw e;
+    }
   });
 
   test('不具合管理タブに遷移できること', async ({ page }) => {
