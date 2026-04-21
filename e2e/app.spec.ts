@@ -14,8 +14,8 @@ test.describe('Qraft 基本画面遷移', () => {
   test('テスト項目タブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.sidebar')).toBeVisible();
-    await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
-    const heading = page.getByRole('heading', { level: 1 });
+    await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
+    const heading = page.locator('.header').getByRole('heading', { level: 1 });
     await heading.waitFor();
     await expect(heading).toHaveText('テスト項目書 (Test Cases)');
   });
@@ -23,8 +23,8 @@ test.describe('Qraft 基本画面遷移', () => {
   test('不具合管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.sidebar')).toBeVisible();
-    await page.locator('.nav-item', { hasText: '不具合管理' }).click();
-    const heading = page.getByRole('heading', { level: 1 });
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '不具合管理' }).click();
+    const heading = page.locator('.header').getByRole('heading', { level: 1 });
     await heading.waitFor();
     await expect(heading).toHaveText('不具合管理 (Defects)');
   });
@@ -32,8 +32,8 @@ test.describe('Qraft 基本画面遷移', () => {
   test('課題管理タブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.sidebar')).toBeVisible();
-    await page.locator('.nav-item', { hasText: '課題ボード' }).click();
-    const heading = page.getByRole('heading', { level: 1 });
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
+    const heading = page.locator('.header').getByRole('heading', { level: 1 });
     await heading.waitFor();
     await expect(heading).toHaveText('課題ボード (Issues)');
   });
@@ -41,8 +41,8 @@ test.describe('Qraft 基本画面遷移', () => {
   test('ダッシュボードタブに遷移できること', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.sidebar')).toBeVisible();
-    await page.locator('.nav-item', { hasText: 'ダッシュボード' }).click();
-    const heading = page.getByRole('heading', { level: 1 });
+    await page.locator('.sidebar').locator('.nav-item', { hasText: 'ダッシュボード' }).click();
+    const heading = page.locator('.header').getByRole('heading', { level: 1 });
     await heading.waitFor();
     await expect(heading).toHaveText('プロジェクト概要 (Dashboard)');
   });
@@ -51,10 +51,13 @@ test.describe('Qraft 基本画面遷移', () => {
 test.describe('Qraft テスト項目 CRUD', () => {
   test('テスト項目の新規作成フォームが開閉できること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: 'テスト項目書' }).click();
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: 'テスト項目書' }).click();
 
-    // 新規作成ボタンをクリック
-    await page.locator('button', { hasText: '新規作成' }).click();
+    // 新規作成ボタンをクリック (Header内のものに限定)
+    const newBtn = page.locator('.header').getByRole('button', { name: /新規作成/ });
+    await newBtn.waitFor();
+    await newBtn.click();
     // モーダルが表示される
     await expect(page.locator('.modal-overlay')).toBeVisible();
     await expect(page.locator('h2', { hasText: 'テスト項目の新規作成' })).toBeVisible();
@@ -68,7 +71,8 @@ test.describe('Qraft テスト項目 CRUD', () => {
 test.describe('Qraft 課題管理カンバン', () => {
   test('カンバンボードの列（未着手・進行中・完了）が表示されること', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.nav-item', { hasText: '課題ボード' }).click();
+    await expect(page.locator('.sidebar')).toBeVisible();
+    await page.locator('.sidebar').locator('.nav-item', { hasText: '課題ボード' }).click();
 
     // カンバンの3列が表示される
     await expect(page.locator('h3', { hasText: '未着手' })).toBeVisible();
