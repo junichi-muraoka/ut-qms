@@ -118,7 +118,7 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/test-items?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setTestItems(data || []);
+      setTestItems(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
@@ -129,7 +129,7 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/defects?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setDefects(data || []);
+      setDefects(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
@@ -140,7 +140,7 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/issues?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setIssues(data || []);
+      setIssues(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
     }
@@ -185,7 +185,7 @@ function AppContent() {
     try {
       const res = await fetch(`${API_BASE_URL}/api/milestones?systemId=${activeSystemId}`, { credentials: 'include' });
       const data = await res.json();
-      setMilestones(data || []);
+      setMilestones(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Failed to fetch milestones', err);
     }

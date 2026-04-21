@@ -42,7 +42,7 @@ const Dashboard: React.FC<DashboardProps> = ({ stats, trendData }) => {
           <h3>進捗トレンド (バーンダウン予想)</h3>
           <div style={{ height: '300px', width: '100%' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={trendData?.progressTrend || []}>
+              <LineChart data={Array.isArray(trendData?.progressTrend) ? trendData.progressTrend : []}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                 <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
@@ -58,7 +58,7 @@ const Dashboard: React.FC<DashboardProps> = ({ stats, trendData }) => {
           <h3>品質トレンド (累積不具合数とパス率)</h3>
           <div style={{ height: '300px', width: '100%' }}>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={trendData?.qualityTrend || []}>
+              <AreaChart data={Array.isArray(trendData?.qualityTrend) ? trendData.qualityTrend : []}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                 <XAxis dataKey="date" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />

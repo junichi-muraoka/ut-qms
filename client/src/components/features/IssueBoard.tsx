@@ -22,7 +22,7 @@ const IssueBoard: React.FC<IssueBoardProps> = ({ issues, loading, onStatusChange
                 status === 'Todo' ? '未着手' : 
                 status === 'InProgress' ? '進行中' : '完了'
               }</h3>
-              {(issues || []).filter((i) => i.status === status).map((issue) => (
+              {Array.isArray(issues) ? issues.filter((i) => i.status === status).map((issue) => (
                 <div key={issue.id} className="card" style={{ marginBottom: '0.5rem', padding: '1rem', cursor: 'pointer' }}>
                   <div style={{ fontWeight: 'bold', marginBottom: '0.5rem' }}>{issue.title}</div>
                   <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{issue.description}</div>
